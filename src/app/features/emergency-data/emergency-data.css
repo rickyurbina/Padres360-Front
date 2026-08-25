@@ -1,0 +1,21 @@
+
+/* Radios (Sí / No) */
+.form-group input[type="radio"] {
+  accent-color: var(--secondary);
+  cursor: pointer;
+}
+
+
+/* === Corrige radios y checkboxes === */
+input[type="radio"],
+input[type="checkbox"] {
+  -webkit-appearance: auto !important;
+  appearance: auto !important;
+  width: auto;
+  height: auto;
+  margin-right: 0.5rem;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}

@@ -1,0 +1,535 @@
+/* Estilos específicos para el componente de envío de mensajes en dashboard */
+.card-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);
+  background: color-mix(in oklab, var(--bg) 50%, transparent);
+}
+
+.card-header h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.radio-option input[type="radio"] {
+  display: none;
+}
+
+.radio-custom {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--secondary) 50%, transparent);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom {
+  border-color: var(--secondary);
+}
+
+.radio-option input[type="radio"]:checked + .radio-custom::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--secondary);
+}
+
+/* Pastillas de grupos seleccionados */
+.selected-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.group-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: color-mix(in oklab, var(--secondary) 12%, transparent);
+  color: var(--secondary);
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: 1px solid color-mix(in oklab, var(--secondary) 30%, transparent);
+}
+
+.pill-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.pill-remove:hover {
+  background: color-mix(in oklab, var(--danger) 10%, transparent);
+}
+
+.selection-count {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: var(--white);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: color-mix(in oklab, var(--secondary) 8%, transparent);
+  color: var(--ink);
+}
+
+.modal-body {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* Filtros del modal */
+.modal-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 150px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.filter-group select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--secondary) 30%, transparent);
+  border-radius: 0.5rem;
+  background: var(--white);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+/* Acciones masivas */
+.bulk-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Lista de grupos en el modal */
+.groups-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.group-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in oklab, var(--secondary) 15%, transparent);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.group-item:hover {
+  background: color-mix(in oklab, var(--secondary) 5%, transparent);
+  transform: translateY(-1px);
+}
+
+.group-item.selected {
+  background: color-mix(in oklab, var(--secondary) 12%, transparent);
+  border-color: var(--secondary);
+}
+
+.group-checkbox {
+  flex-shrink: 0;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid color-mix(in oklab, var(--secondary) 50%, transparent);
+  border-radius: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.checkbox-custom.checked {
+  background: var(--secondary);
+  border-color: var(--secondary);
+  color: white;
+}
+
+.checkbox-custom i {
+  font-size: 0.75rem;
+}
+
+.group-info {
+  flex: 1;
+}
+
+.group-name {
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.25rem;
+}
+
+.group-details {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.selection-summary {
+  text-align: center;
+  padding: 1rem;
+  background: color-mix(in oklab, var(--bg) 50%, transparent);
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);
+}
+
+/* Resto de estilos existentes... */
+.form-textarea {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(135deg, var(--secondary), var(--primary)) border-box;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+  font: 600 1rem var(--font-heading);
+  color: var(--ink);
+  transition: box-shadow .2s ease, transform .05s ease;
+  resize: vertical;
+  min-height: 120px;
+  font-weight: 500;
+}
+
+.form-textarea:focus {
+  outline: none;
+  box-shadow: 0 10px 28px rgba(10, 146, 205, .25);
+  transform: translateY(-1px);
+}
+
+.form-textarea::placeholder {
+  color: color-mix(in oklab, var(--muted) 75%, white);
+  font-weight: 500;
+}
+
+.attachments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.file-input-wrapper {
+  position: relative;
+}
+
+.file-input-wrapper input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.attachments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.attachment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: color-mix(in oklab, var(--bg) 50%, transparent);
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in oklab, var(--secondary) 10%, transparent);
+  transition: all 0.2s ease;
+}
+
+.attachment-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.08);
+}
+
+.attachment-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.attachment-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.attachment-size {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: auto;
+  padding-right: 1rem;
+}
+
+.attachment-remove {
+  background: none;
+  border: none;
+  color: var(--danger);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.attachment-remove:hover {
+  background: color-mix(in oklab, var(--danger) 10%, transparent);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .radio-group {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .modal-filters {
+    flex-direction: column;
+  }
+  
+  .filter-group {
+    min-width: auto;
+  }
+  
+  .bulk-actions {
+    flex-direction: column;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    padding: 1rem;
+  }
+  
+  .card-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .form-section {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .modal-content {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+  
+  .modal-header,
+  .modal-body,
+  .modal-actions {
+    padding: 1rem;
+  }
+}

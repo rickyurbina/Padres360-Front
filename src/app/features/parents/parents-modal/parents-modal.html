@@ -1,0 +1,120 @@
+<!-- Username -->
+<div class="form-group">
+  <label class="inline-label">
+    Nombre de usuario <span class="required" style="color: red;">*</span>
+  </label>
+  <input type="text" [(ngModel)]="formParent.username" (input)="onUsernameInput($event)" class="form-control"
+    [class.is-invalid]="formErrors.username" placeholder="Ej: juan123" maxlength="30" />
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formParent.username.length }}/30 caracteres
+  </small>
+  <div class="error-message" *ngIf="formErrors.username">
+    <i class="fas fa-exclamation-circle"></i> {{ formErrors.username }}
+  </div>
+</div>
+
+<!-- Nombre -->
+<div class="form-group">
+  <label class="inline-label">
+    Nombre <span class="required" style="color: red;">*</span>
+  </label>
+  <input type="text" class="text-uppercase" [(ngModel)]="formParent.first_name" (input)="onFirstNameInput($event)" class="form-control"
+    [class.is-invalid]="formErrors.first_name" placeholder="Ej: Juan" maxlength="50" />
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formParent.first_name.length }}/50 caracteres
+  </small>
+  <div class="error-message" *ngIf="formErrors.first_name">
+    <i class="fas fa-exclamation-circle"></i> {{ formErrors.first_name }}
+  </div>
+</div>
+
+<!-- Apellido -->
+<div class="form-group">
+  <label class="inline-label">
+    Apellido <span style="color: red;">*</span>
+  </label>
+  <input type="text" class="text-uppercase" [(ngModel)]="formParent.lastname" (input)="onLastNameInput($event)" class="form-control"
+    [class.is-invalid]="formErrors.lastname" placeholder="Ej: Pérez" maxlength="50" />
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formParent.lastname.length }}/50 caracteres
+  </small>
+  <div class="error-message" *ngIf="formErrors.lastname">
+    <i class="fas fa-exclamation-circle"></i> {{ formErrors.lastname }}
+  </div>
+</div>
+
+
+<!-- Correo -->
+<div class="form-group">
+  <label>Correo electrónico</label>
+  <input type="email" [(ngModel)]="formParent.email" (input)="onEmailInput($event)" class="form-control"
+    [class.is-invalid]="formErrors.email" placeholder="ejemplo@correo.com">
+  <div *ngIf="formErrors.email" class="error-message">{{ formErrors.email }}</div>
+</div>
+
+<!-- Teléfono -->
+<div class="form-group">
+  <label>Teléfono</label>
+  <input type="text" [(ngModel)]="formParent.cellphone" (input)="onCellphoneInput($event)"
+    (keydown)="onCellphoneKeyDown($event)" maxlength="10" class="form-control" [class.is-invalid]="formErrors.cellphone"
+    placeholder="10 dígitos">
+  <div *ngIf="formErrors.cellphone" class="error-message">{{ formErrors.cellphone }}</div>
+</div>
+
+<!-- Contraseña -->
+<div class="form-group password-group">
+  <label>Contraseña</label>
+  <div class="password-wrapper">
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      [(ngModel)]="formParent.password"
+      (input)="onPasswordInput($event)"
+      class="form-control"
+      [class.is-invalid]="formErrors.password"
+      placeholder="Mínimo 6 caracteres"
+      maxlength="30"
+    />
+    <button
+      type="button"
+      class="toggle-password"
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+    >
+      <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+    </button>
+  </div>
+
+  <div *ngIf="formErrors.password" class="error-message">
+    {{ formErrors.password }}
+  </div>
+</div>
+
+
+<!-- Lista completa de errores -->
+<div *ngIf="hasFormErrors()"
+  style="background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1rem;">
+  <p style="margin: 0 0 0.5rem 0; font-size: 0.9rem; color: #dc2626;">
+    <i class="fas fa-exclamation-triangle"></i>
+    <strong>Errores de validación:</strong>
+  </p>
+
+  <ul style="margin: 0; padding-left: 1.5rem; font-size: 0.85rem; color: #dc2626;">
+     <li *ngIf="formErrors.general"><strong></strong> {{ formErrors.general }}</li>
+    <li *ngIf="formErrors.username"><strong>Usuario:</strong> {{ formErrors.username }}</li>
+    <li *ngIf="formErrors.first_name"><strong>Nombre:</strong> {{ formErrors.first_name }}</li>
+    <li *ngIf="formErrors.lastname"><strong>Apellido:</strong> {{ formErrors.lastname }}</li>
+    <li *ngIf="formErrors.email"><strong>Correo:</strong> {{ formErrors.email }}</li>
+    <li *ngIf="formErrors.cellphone"><strong>Teléfono:</strong> {{ formErrors.cellphone }}</li>
+    <li *ngIf="formErrors.password"><strong>Contraseña:</strong> {{ formErrors.password }}</li>
+  </ul>
+</div>
+
+<!-- Botones -->
+<div class="modal-actions">
+  <button class="btn btn-outline" (click)="close()">
+    <i class="fas fa-times"></i> Cancelar
+  </button>
+  <button class="btn btn-primary" (click)="save()">
+    <i class="fas fa-save"></i> Guardar
+  </button>
+</div>

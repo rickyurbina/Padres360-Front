@@ -1,0 +1,285 @@
+.welcome-minimal-container {
+  min-height: 100lv;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  
+  /* Eliminado el background y el pseudo-elemento ::before */
+}
+
+.welcome-center {
+  text-align: center;
+  z-index: 1;
+  position: relative;
+  max-width: 500px;
+  width: 100%;
+}
+
+/* Avatar del Usuario */
+.user-avatar-section {
+  margin-bottom: 2rem;
+  
+  .avatar-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fbbe48, #f59e0b);
+    border: 4px solid white;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      0 4px 16px rgba(251, 189, 72, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        0 6px 20px rgba(251, 189, 72, 0.3);
+    }
+    
+    .avatar-initial {
+      font-size: 3rem;
+      font-weight: 800;
+      font-family: var(--font-emph);
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Sección de Saludo */
+.greeting-section {
+  margin-bottom: 1.5rem;
+  
+  .main-greeting {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+    line-height: 1.2;
+  }
+  
+  .user-name {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--ink), #374151);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Sección del Rol */
+.role-section {
+  margin-bottom: 2.5rem;
+  
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in oklab, var(--accent) 20%, transparent);
+    border-radius: 999px;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+      background: color-mix(in oklab, var(--accent) 5%, white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .role-icon {
+      font-size: 1.2rem;
+    }
+    
+    .role-text {
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+/* Sección de Mensajes */
+.message-section {
+  margin-bottom: 2rem;
+  
+  .welcome-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: white;
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in oklab, var(--accent) 15%, transparent);
+    border-radius: 1.5rem;
+    padding: 1.5rem 2rem;
+    transition: all 0.3s ease;
+    animation: messageSlide 0.5s ease-out;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+      background: color-mix(in oklab, var(--accent) 3%, white);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .message-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .message-text {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1.2rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+  }
+}
+
+/* Indicador de Mensajes */
+.message-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  
+  .indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--muted) 30%, white);
+    transition: all 0.3s ease;
+    
+    &.active {
+      background: var(--accent);
+      transform: scale(1.2);
+    }
+  }
+}
+
+/* Animaciones */
+@keyframes messageSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Efectos de respiración para el mensaje */
+.welcome-message {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  50% {
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcome-minimal-container {
+    padding: 1rem;
+  }
+  
+  .avatar-circle {
+    width: 100px !important;
+    height: 100px !important;
+    
+    .avatar-initial {
+      font-size: 2.5rem !important;
+    }
+  }
+  
+  .main-greeting {
+    font-size: 2rem !important;
+  }
+  
+  .user-name {
+    font-size: 2.5rem !important;
+  }
+  
+  .welcome-message {
+    padding: 1.25rem 1.5rem !important;
+    
+    .message-text {
+      font-size: 1.1rem !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .avatar-circle {
+    width: 80px !important;
+    height: 80px !important;
+    
+    .avatar-initial {
+      font-size: 2rem !important;
+    }
+  }
+  
+  .main-greeting {
+    font-size: 1.75rem !important;
+  }
+  
+  .user-name {
+    font-size: 2rem !important;
+  }
+  
+  .welcome-message {
+    flex-direction: column;
+    gap: 0.75rem !important;
+    text-align: center;
+    
+    .message-text {
+      font-size: 1rem !important;
+    }
+  }
+  
+  .role-badge {
+    padding: 0.5rem 1.25rem !important;
+    
+    .role-text {
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
+/* Para prevenir scroll en toda la aplicación cuando este componente esté activo */
+:host {
+  display: block;
+  overflow: hidden;
+}
+
+/* Asegurar que no haya scroll en el body cuando este componente esté activo */
+body.component-welcome-active {
+  overflow: hidden;
+}

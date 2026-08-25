@@ -1,0 +1,44 @@
+<div class="form-section">
+    Se aplicará la acción a <strong>{{ selected.length }}</strong> {{ isStudent ? 'alumno(s)' : 'profesor(es)' }}
+</div>
+
+<!-- Título de incidencias -->
+<div class="form-section">
+    <label class="form-label">
+        Seleccione las incidencias:
+    </label>
+
+    <!-- Lista de incidencias como chips -->
+    <div class="selected-groups" *ngIf="incidences.length > 0">
+        <div *ngFor="let incidence of incidences" class="group-pill incidence-pill"
+            [class.selected]="incidence.selected" (click)="onIncidenceToggle(incidence)">
+            <span class="pill-text">{{ incidence.name || '' }}</span>
+            <span class="pill-check" *ngIf="incidence.selected">
+                <i class="fas fa-check"></i>
+            </span>
+        </div>
+    </div>
+
+    <!-- Campo de observaciones -->
+    <div class="form-group">
+        <div class="form-group">
+            <label for="observation" class="form-label">
+                Observaciones
+            </label>
+            <textarea id="observation" [(ngModel)]="observation" rows="4"
+                placeholder="Ingrese las observaciones de la incidencia..." class="form-textarea text-uppercase"></textarea>
+        </div>
+    </div>
+
+
+    <!-- Modal Footer -->
+    <div class="modal-actions">
+        <button class="btn btn-outline" (click)="close()">
+            <i class="fas fa-times"></i>
+            Cancelar
+        </button>
+        <button class="btn btn-primary" (click)="onConfirm()" [disabled]="!isFormValid() || isLoading">
+            <i class="fas fa-check-circle"></i>
+            Confirmar Incidencias
+        </button>
+    </div>

@@ -1,0 +1,213 @@
+
+
+<!-- Nombre -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Nombre <span class="required">*</span>
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.firstName"
+(input)="onFirstNameInput($event)"
+class="form-control text-uppercase"
+[class.is-invalid]="formErrors.firstName"
+placeholder="Ej: Roberto"
+maxlength="50"
+/>
+
+  <small class="char-counter">
+    {{ formTeacher.firstName.length || 0 }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.firstName">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.firstName }}
+  </div>
+</div>
+
+<!-- Apellido Paterno -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Apellido Paterno <span class="required">*</span>
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.firstSurname"
+(input)="onFirstSurnameInput($event)"
+class="form-control text-uppercase"
+[class.is-invalid]="formErrors.firstSurname"
+placeholder="Ej: Pérez"
+maxlength="50"
+/>
+
+  <small class="char-counter">
+    {{ formTeacher.firstSurname.length || 0 }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.firstSurname">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.firstSurname }}
+  </div>
+</div>
+
+<!-- Apellido Materno -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Apellido Materno
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.secondSurname"
+(input)="onSecondSurnameInput($event)"
+class="form-control text-uppercase"
+placeholder="Ej: López"
+maxlength="50"
+/>
+
+  <small class="char-counter">
+    {{ formTeacher.secondSurname.length || 0 }}/50 caracteres
+  </small>
+</div>
+
+<!-- Teléfono -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Teléfono <span class="required">*</span>
+  </label>
+
+<input
+type="tel"
+[(ngModel)]="formTeacher.phone"
+class="form-control"
+[class.is-invalid]="formErrors.phone"
+placeholder="6561124545"
+maxlength="10"
+/>
+
+  <div class="error-message" *ngIf="formErrors.phone">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.phone }}
+  </div>
+</div>
+
+<!-- Correo -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Correo Electrónico <span class="required">*</span>
+  </label>
+
+<input
+type="email"
+[(ngModel)]="formTeacher.email"
+class="form-control"
+[class.is-invalid]="formErrors.email"
+placeholder="roberto@school45.com"
+/>
+
+  <div class="error-message" *ngIf="formErrors.email">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.email }}
+  </div>
+</div>
+
+<hr>
+
+<h4>Datos de Acceso</h4>
+
+<!-- Usuario -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Usuario <span class="required">*</span>
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.user.username"
+class="form-control"
+placeholder="juanperezz56"
+/>
+
+</div>
+
+<!-- Contraseña -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Contraseña <span class="required">*</span>
+  </label>
+
+<input
+type="password"
+[(ngModel)]="formTeacher.user.password"
+class="form-control"
+/>
+
+</div>
+
+<!-- Nombre Usuario -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Nombre del Usuario <span class="required">*</span>
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.user.firstName"
+class="form-control"
+placeholder="Juan"
+/>
+
+</div>
+
+<!-- Apellido Usuario -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Apellido del Usuario <span class="required">*</span>
+  </label>
+
+<input
+type="text"
+[(ngModel)]="formTeacher.user.lastName"
+class="form-control"
+placeholder="Pérez"
+/>
+
+</div>
+
+<!-- Email Usuario -->
+
+<div class="form-group">
+  <label class="inline-label">
+    Correo del Usuario <span class="required">*</span>
+  </label>
+
+<input
+type="email"
+[(ngModel)]="formTeacher.user.email"
+class="form-control"
+placeholder="roberto@school45.com"
+/>
+
+</div>
+
+<hr>
+
+<h4>Asignaciones</h4>
+
+<button
+type="button"
+class="btn btn-primary"
+>
+
+Agregar Materia </button>

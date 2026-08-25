@@ -1,0 +1,6 @@
+.sticky-header {
+    position: sticky;
+    top: 0;
+    background: white; /* o tu color */
+    z-index: 10;
+}

@@ -1,0 +1,421 @@
+<!-- ========================= -->
+<!-- DATOS DEL ALUMNO -->
+<!-- ========================= -->
+
+<!-- Nombre -->
+<div class="form-group">
+  <label class="inline-label">
+    Nombre <span class="required" style="color: red;">*</span>
+  </label>
+
+  <input 
+    type="text" 
+    [(ngModel)]="formStudent.firstName"
+    (input)="onFirstNameInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.firstName"
+    placeholder="Ej: Luis"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.firstName.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.firstName">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.firstName }}
+  </div>
+</div>
+
+<!-- Apellido Paterno -->
+<div class="form-group">
+  <label class="inline-label">
+    Apellido Paterno <span style="color: red;">*</span>
+  </label>
+
+  <input 
+    type="text" 
+    [(ngModel)]="formStudent.firstSurname"
+    (input)="onFirstSurnameInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.firstSurname"
+    placeholder="Ej: Gomez"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.firstSurname.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.firstSurname">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.firstSurname }}
+  </div>
+</div>
+
+<!-- Apellido Materno -->
+<div class="form-group">
+  <label class="inline-label">
+    Apellido Materno
+  </label>
+
+  <input 
+    type="text" 
+    [(ngModel)]="formStudent.secondSurname"
+    (input)="onSecondSurnameInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.secondSurname"
+    placeholder="Ej: Carmona"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.secondSurname.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.secondSurname">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.secondSurname }}
+  </div>
+</div>
+
+<!-- Número de Control -->
+<div class="form-group">
+  <label class="inline-label">
+    Número de Control <span style="color: red;">*</span>
+  </label>
+
+  <input 
+    type="text" 
+    [(ngModel)]="formStudent.controlNumber"
+    (input)="onControlNumberInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.controlNumber"
+    placeholder="Ej: MCH6584"
+    maxlength="20">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.controlNumber.length }}/20 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.controlNumber">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.controlNumber }}
+  </div>
+</div>
+
+<!-- CURP -->
+<div class="form-group">
+  <label class="inline-label">
+    CURP <span style="color: red;">*</span>
+  </label>
+
+  <input 
+    type="text" 
+    [(ngModel)]="formStudent.curp"
+    (input)="onCurpInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.curp"
+    placeholder="Ej: CACM110411HCH659"
+    maxlength="18"
+    style="text-transform: uppercase;">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.curp.length }}/18 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.curp">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.curp }}
+  </div>
+</div>
+
+<!-- Grupo -->
+<div class="form-group">
+  <label class="inline-label">
+    Grupo <span style="color: red;">*</span>
+  </label>
+
+  <select
+    [(ngModel)]="formStudent.group_id"
+    class="form-control"
+    [class.is-invalid]="formErrors.group">
+
+    <option [ngValue]="null">Seleccione un grupo</option>
+
+    <option *ngFor="let group of groups" [ngValue]="group.id">
+      {{ group.grade }} - {{ group.name }} - {{ group.specialty }}
+    </option>
+  </select>
+
+  <div class="error-message" *ngIf="formErrors.group">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.group }}
+  </div>
+</div>
+
+<hr style="margin: 2rem 0; border-color: #e5e7eb;">
+
+<!-- ========================= -->
+<!-- DATOS DEL PADRE -->
+<!-- ========================= -->
+
+<h3 style="margin-bottom: 1rem;">
+  Datos del Padre/Tutor
+</h3>
+
+<!-- Usuario -->
+<div class="form-group">
+  <label class="inline-label">
+    Usuario <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="formStudent.parent.username"
+    (input)="onParentUsernameInput($event)"
+    class="form-control"
+    [class.is-invalid]="formErrors.username"
+    placeholder="Ej: padre19"
+    maxlength="30">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.username.length }}/30 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.username">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.username }}
+  </div>
+</div>
+
+<!-- Nombre -->
+<div class="form-group">
+  <label class="inline-label">
+    Nombre <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="formStudent.parent.first_name"
+    (input)="onParentFirstNameInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.parentFirstName"
+    placeholder="Ej: Maria"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.first_name.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.parentFirstName">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.parentFirstName }}
+  </div>
+</div>
+
+<!-- Apellido -->
+<div class="form-group">
+  <label class="inline-label">
+    Apellido <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="formStudent.parent.last_name"
+    (input)="onParentLastNameInput($event)"
+    class="form-control text-uppercase"
+    [class.is-invalid]="formErrors.parentLastName"
+    placeholder="Ej: Gomez"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.last_name.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.parentLastName">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.parentLastName }}
+  </div>
+</div>
+
+<!-- Correo -->
+<div class="form-group">
+  <label class="inline-label">
+    Correo Electrónico <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="email"
+    [(ngModel)]="formStudent.parent.email"
+    (input)="onParentEmailInput($event)"
+    class="form-control"
+    [class.is-invalid]="formErrors.email"
+    placeholder="Ej: maria@correo.com"
+    maxlength="100">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.email.length }}/100 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.email">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.email }}
+  </div>
+</div>
+
+<!-- Contraseña -->
+<div class="form-group">
+  <label class="inline-label">
+    Contraseña <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="password"
+    [(ngModel)]="formStudent.parent.password"
+    (input)="onParentPasswordInput($event)"
+    class="form-control"
+    [class.is-invalid]="formErrors.password"
+    placeholder="Ingrese contraseña"
+    maxlength="50">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.password.length }}/50 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.password">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.password }}
+  </div>
+</div>
+
+<!-- Teléfono -->
+<div class="form-group">
+  <label class="inline-label">
+    Teléfono Celular <span style="color:red">*</span>
+  </label>
+
+  <input
+    type="text"
+    [(ngModel)]="formStudent.parent.cell_phone"
+    (input)="onParentCellPhoneInput($event)"
+    class="form-control"
+    [class.is-invalid]="formErrors.cellphone"
+    maxlength="10"
+    placeholder="6561444799">
+
+  <small style="color: var(--muted); font-size: 0.85rem;">
+    {{ formStudent.parent.cell_phone.length }}/10 caracteres
+  </small>
+
+  <div class="error-message" *ngIf="formErrors.cellphone">
+    <i class="fas fa-exclamation-circle"></i>
+    {{ formErrors.cellphone }}
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- ERRORES GENERALES -->
+<!-- ========================= -->
+
+<div *ngIf="hasFormErrors()" 
+     style="
+      background-color: #fef2f2;
+      border-left: 4px solid #ef4444;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      margin-bottom: 1rem;">
+
+  <p style="
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+      color: #dc2626;">
+
+    <i class="fas fa-exclamation-triangle"></i> 
+    <strong>Errores de validación:</strong>
+  </p>
+
+  <ul style="
+    margin: 0;
+    padding-left: 1.5rem;
+    font-size: 0.85rem;
+    color: #dc2626;">
+
+  <li *ngIf="formErrors.firstName">
+    <strong>Nombre:</strong>
+    {{ formErrors.firstName }}
+  </li>
+
+  <li *ngIf="formErrors.firstSurname">
+    <strong>Apellido Paterno:</strong>
+    {{ formErrors.firstSurname }}
+  </li>
+
+  <li *ngIf="formErrors.secondSurname">
+    <strong>Apellido Materno:</strong>
+    {{ formErrors.secondSurname }}
+  </li>
+
+  <li *ngIf="formErrors.controlNumber">
+    <strong>Número de Control:</strong>
+    {{ formErrors.controlNumber }}
+  </li>
+
+  <li *ngIf="formErrors.curp">
+    <strong>CURP:</strong>
+    {{ formErrors.curp }}
+  </li>
+
+  <li *ngIf="formErrors.group">
+    <strong>Grupo:</strong>
+    {{ formErrors.group }}
+  </li>
+
+  <li *ngIf="formErrors.username">
+    <strong>Usuario:</strong>
+    {{ formErrors.username }}
+  </li>
+
+  <li *ngIf="formErrors.parentFirstName">
+    <strong>Nombre del Padre/Tutor:</strong>
+    {{ formErrors.parentFirstName }}
+  </li>
+
+  <li *ngIf="formErrors.parentLastName">
+    <strong>Apellido del Padre/Tutor:</strong>
+    {{ formErrors.parentLastName }}
+  </li>
+
+  <li *ngIf="formErrors.email">
+    <strong>Correo Electrónico:</strong>
+    {{ formErrors.email }}
+  </li>
+
+  <li *ngIf="formErrors.password">
+    <strong>Contraseña:</strong>
+    {{ formErrors.password }}
+  </li>
+
+  <li *ngIf="formErrors.cellphone">
+    <strong>Teléfono Celular:</strong>
+    {{ formErrors.cellphone }}
+  </li>
+
+</ul>
+</div>
+
+<!-- ========================= -->
+<!-- BOTONES -->
+<!-- ========================= -->
+
+<div class="modal-actions">
+
+  <button class="btn btn-outline" (click)="close()">
+    <i class="fas fa-times"></i>
+    Cancelar
+  </button>
+
+  <button class="btn btn-primary" (click)="save()">
+    <i class="fas fa-save"></i>
+    Guardar
+  </button>
+
+</div>

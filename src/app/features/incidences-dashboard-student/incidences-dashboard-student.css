@@ -1,0 +1,858 @@
+.dashboard-container {
+  padding: 2rem;
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+  text-align: center;
+  
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--secondary);
+  }
+  
+  p {
+    margin: .25rem 0 0;
+    color: var(--muted);
+    font-weight: 500;
+  }
+}
+
+/* Tarjeta de Resumen General */
+.summary-card {
+  background: var(--white);
+  border: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.05);
+  
+  .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .summary-info {
+      h2 {
+        margin: 0 0 .5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--ink);
+      }
+      
+      .period-text {
+        margin: 0;
+        color: var(--muted);
+        font-weight: 500;
+      }
+    }
+    
+    .incidence-count {
+      text-align: center;
+      background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: var(--white);
+      padding: .75rem 1.5rem;
+      border-radius: 999px;
+      box-shadow: 0 8px 24px color-mix(in oklab, var(--secondary) 30%, transparent);
+      
+      .count-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 800;
+        font-family: var(--font-emph);
+      }
+      
+      .count-label {
+        font-size: .85rem;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+/* Filtros */
+.filters-card {
+  background: var(--white);
+  border: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.05);
+  
+  .section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+  
+  .filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas en desktop */
+    gap: 1rem;
+    
+    /* Tablet: 2 columnas */
+    @media (max-width: 1024px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Mobile: 1 columna */
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Mobile pequeño: 1 columna con menos gap */
+    @media (max-width: 480px) {
+        gap: 0.75rem;
+    }
+    
+    .filter-group {
+        label {
+            display: block;
+            margin-bottom: .5rem;
+            font-weight: 600;
+            color: var(--ink);
+            
+            /* Reducir tamaño de fuente en móvil */
+            @media (max-width: 480px) {
+                font-size: 0.9rem;
+                margin-bottom: 0.35rem;
+            }
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 2px solid transparent;
+            border-radius: 999px;
+            background: linear-gradient(var(--white), var(--white)) padding-box,
+                        linear-gradient(135deg, var(--secondary), var(--primary)) border-box;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            color: var(--ink);
+            cursor: pointer;
+            
+            /* Ajustes para móvil */
+            @media (max-width: 768px) {
+                padding: 0.7rem 0.9rem;
+                font-size: 0.95rem;
+            }
+            
+            @media (max-width: 480px) {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px color-mix(in oklab, var(--secondary) 20%, transparent);
+            }
+            
+            /* Ajustar sombra en móvil */
+            @media (max-width: 480px) {
+                &:focus {
+                    box-shadow: 0 0 0 2px color-mix(in oklab, var(--secondary) 20%, transparent);
+                }
+            }
+        }
+    }
+}
+
+/* Opcional: Si tienes un contenedor padre para los filtros, 
+   puedes agregar estilos responsive también */
+.filters-card {
+    /* Ajustes de padding para móvil */
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
+    
+    @media (max-width: 480px) {
+        padding: 0.75rem;
+    }
+    
+    .section-title {
+        @media (max-width: 480px) {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+/* Si tienes el selector de tipo de periodo fuera del grid */
+.filter-group:first-of-type {
+    /* Ocupa todo el ancho en móvil si es necesario */
+    @media (max-width: 768px) {
+        grid-column: 1 / -1;
+    }
+}
+}
+
+/* Grid de Métricas */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  display: flex;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.05);
+  transition: transform .2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  .metric-card__icon {
+    font-size: 2rem;
+    margin-right: 1rem;
+  }
+  
+  .metric-card__content {
+    h3 {
+      margin: 0 0 .35rem;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
+    .metric-card__value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      font-family: var(--font-emph);
+    }
+  }
+}
+
+/* Clases modificadoras separadas para métricas */
+.metric-card--blue { 
+  border-left: 6px solid var(--secondary); 
+}
+
+.metric-card--green { 
+  border-left: 6px solid var(--ok); 
+}
+
+.metric-card--orange { 
+  border-left: 6px solid var(--warning); 
+}
+
+.metric-card--purple { 
+  border-left: 6px solid var(--primary); 
+}
+
+/* Grid de Contenido */
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: var(--white);
+  border: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 14px rgba(2, 6, 23, 0.05);
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    
+    h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 1rem;
+  }
+}
+
+/* Lista de Estadísticas */
+.stats-list {
+  display: grid;
+  gap: .75rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: .75rem;
+  border-radius: .75rem;
+  background: color-mix(in oklab, var(--secondary) 4%, transparent);
+  transition: background .2s ease;
+  
+  &:hover {
+    background: color-mix(in oklab, var(--secondary) 8%, transparent);
+  }
+  
+  .stat-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    
+    .stat-header {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      min-width: 120px;
+      
+      .stat-badge {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      
+      .medal-icon {
+        font-size: 1rem;
+      }
+      
+      .stat-title {
+        font-weight: 600;
+        color: var(--ink);
+      }
+    }
+    
+    .stat-count {
+      font-size: .85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+  }
+  
+  .stat-percentage {
+    font-weight: 800;
+    font-size: .9rem;
+    color: var(--secondary);
+    font-family: var(--font-emph);
+  }
+}
+
+/* Sección de Acción */
+.action-section {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Botones */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  border: 0;
+  border-radius: 999px;
+  padding: .75rem 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  transition: all .2s ease;
+}
+
+/* Clases de botones separadas */
+.btn-primary {
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: var(--white);
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--secondary) 30%, transparent);
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px color-mix(in oklab, var(--secondary) 40%, transparent);
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--secondary);
+  border: 2px solid color-mix(in oklab, var(--secondary) 50%, var(--primary) 50%);
+  
+  &:hover {
+    background: color-mix(in oklab, var(--secondary) 8%, transparent);
+  }
+}
+
+.btn-sm {
+  padding: .5rem 1rem;
+  font-size: .85rem;
+}
+
+.btn-large {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  
+  .btn-icon {
+    margin-right: .5rem;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .summary-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-item .stat-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.modal-content {
+  background: var(--white);
+  border-radius: 1.5rem;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.2);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--muted);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: color-mix(in oklab, var(--secondary) 8%, transparent);
+    color: var(--ink);
+  }
+}
+
+.modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: color-mix(in oklab, var(--secondary) 4%, transparent);
+  border-radius: 1rem;
+  
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .summary-label {
+      font-weight: 600;
+      color: var(--muted);
+    }
+    
+    .summary-value {
+      font-weight: 800;
+      color: var(--secondary);
+      font-family: var(--font-emph);
+    }
+  }
+}
+
+.teachers-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.teacher-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--secondary) 4%, transparent);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: color-mix(in oklab, var(--secondary) 8%, transparent);
+    transform: translateY(-1px);
+  }
+}
+
+.teacher-rank {
+  .rank-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: var(--white);
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+}
+
+.teacher-info {
+  flex: 1;
+  
+  .teacher-name {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  
+  .teacher-details {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+}
+
+.teacher-stats {
+  .stat-pill {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    color: var(--white);
+    font-weight: 800;
+    font-size: 0.9rem;
+    font-family: var(--font-emph);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid color-mix(in oklab, var(--secondary) 12%, transparent);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive para el modal */
+@media (max-width: 768px) {
+  .modal-overlay {
+    padding: 1rem;
+  }
+  
+  .modal-content {
+    max-height: 90vh;
+  }
+  
+  .modal-header {
+    padding: 1rem 1.5rem;
+    
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+  
+  .modal-body {
+    padding: 1.5rem;
+  }
+  
+  .modal-summary {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .teacher-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    text-align: left;
+  }
+  
+  .teacher-rank {
+    align-self: flex-start;
+  }
+}
+
+
+/* Nuevas tarjetas de métricas */
+.metric-card--red {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+}
+
+.metric-card--gold {
+  background: linear-gradient(135deg, #ffd93e 0%, #f7b731 100%);
+}
+
+.metric-card__subvalue {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+}
+
+/* Badges para los encabezados */
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-danger {
+  background-color: #ff4757;
+  color: white;
+}
+
+.badge-success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+/* Estilos para items de reconocimientos */
+.stat-item--success .stat-title {
+  color: var(--success);
+}
+
+/* Ajustes responsive para más tarjetas */
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Header de cards con badge */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-header h2 {
+  margin: 0;
+}
+
+/* Secciones */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-stats {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.section-stats .percentage {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* Badges mejorados */
+.badge {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-danger {
+  background-color: #ff4757;
+  color: white;
+}
+
+.badge-success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+/* Headers de cards */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Items de estadísticas */
+.stat-item--success .stat-title {
+  color: #27ae60;
+}
+
+.stat-item--success .stat-percentage {
+  color: #27ae60;
+}
+
+/* Estrellas para medallas de reconocimientos */
+.star-icon {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+/* Empty state para reconocimientos */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 1.25rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .section-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Clase auxiliar para centrar texto */
+.text-center {
+  text-align: center;
+}
+
+/* Estilos para el footer de la card */
+.card-footer {
+  padding: 1rem 1rem 0.5rem 1rem;
+  border-top: 1px solid #e9ecef;
+  margin-top: 0.5rem;
+}
+
+/* Opcional: Si quieres que el botón tenga un ancho mínimo */
+.card-footer .btn {
+  min-width: 120px;
+}

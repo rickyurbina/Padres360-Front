@@ -1,0 +1,269 @@
+<div class="card">
+  <div class="card-header">
+    <h2><i class="fas fa-paper-plane list-icon"></i> Enviar Mensaje</h2>
+    <p>Envía mensajes a los padres de familia.</p>
+  </div>
+
+  <div class="card-content">
+    <!-- Controles de destinatarios -->
+    <div class="form-section">
+      <div class="form-group">
+        <label class="form-label">Enviar a:</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="recipientType" [(ngModel)]="recipientType" value="groups">
+            <span class="radio-custom"></span>
+            Grupos específicos
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="recipientType" [(ngModel)]="recipientType" value="shift">
+            <span class="radio-custom"></span>
+            Por turno
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="recipientType" [(ngModel)]="recipientType" value="all">
+            <span class="radio-custom"></span>
+            Todos los padres
+          </label>
+        </div>
+      </div>
+
+      <!-- Selector de grupos con modal -->
+      <div class="form-group" *ngIf="recipientType === 'groups'">
+        <label class="form-label">Grupos seleccionados:</label>
+        
+        <!-- Pastillas de grupos seleccionados -->
+        <div class="selected-groups" *ngIf="selectedGroups.length > 0">
+          <div *ngFor="let group of selectedGroups" class="group-pill">
+            {{ group.name || '' }}
+            <button 
+              type="button" 
+              class="pill-remove"
+              (click)="removeSelectedGroup(group.id)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botón para abrir modal -->
+        <button 
+          type="button" 
+          class="btn btn-outline"
+          (click)="openGroupsModal()">
+          <i class="fas fa-users"></i>
+          {{ selectedGroups.length > 0 ? 'Modificar grupos' : 'Seleccionar grupos' }}
+        </button>
+
+        <!-- Contador de grupos seleccionados -->
+        <div class="selection-count" *ngIf="selectedGroups.length > 0">
+          {{ selectedGroups.length }} grupo(s) seleccionado(s)
+        </div>
+      </div>
+
+      <!-- Selector de turno -->
+      <div class="form-group" *ngIf="recipientType === 'shift'">
+        <label class="form-label">Selecciona turno:</label>
+        <div class="radio-group">
+          <label class="radio-option">
+            <input type="radio" name="shift" [(ngModel)]="selectedShift" value="matutino">
+            <span class="radio-custom"></span>
+            Matutino
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="shift" [(ngModel)]="selectedShift" value="vespertino">
+            <span class="radio-custom"></span>
+            Vespertino
+          </label>
+          <label class="radio-option">
+            <input type="radio" name="shift" [(ngModel)]="selectedShift" value="both">
+            <span class="radio-custom"></span>
+            Ambos turnos
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editor de mensaje -->
+    <div class="form-section">
+      <div class="form-group">
+        <label for="message" class="form-label">Mensaje:</label>
+        <textarea 
+          id="message" 
+          [(ngModel)]="message" 
+          placeholder="Escribe tu mensaje aquí..." 
+          rows="6"
+          class="form-textarea"></textarea>
+      </div>
+    </div>
+
+    <!-- Adjuntos -->
+    <div class="form-section">
+      <div class="form-group">
+        <div class="attachments-header">
+          <label class="form-label">Archivos adjuntos:</label>
+          <div class="file-input-wrapper">
+            <input 
+              type="file" 
+              id="fileInput" 
+              multiple 
+              (change)="onFileSelected($event)"
+              #fileInput>
+            <label for="fileInput" class="btn btn-outline btn-sm">
+              <i class="fas fa-paperclip"></i>
+              Agregar archivos
+            </label>
+          </div>
+        </div>
+        
+        <!-- Lista de archivos adjuntos -->
+        <div class="attachments-list" *ngIf="attachments.length > 0">
+          <div *ngFor="let attachment of attachments; let i = index" class="attachment-item">
+            <div class="attachment-info">
+              <div class="attachment-name">
+                <i class="fas fa-file"></i>
+                {{ attachment.name }}
+              </div>
+              <div class="attachment-size">{{ attachment.size }}</div>
+            </div>
+            <button 
+              type="button" 
+              class="attachment-remove" 
+              (click)="removeAttachment(i)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn btn-outline" 
+        (click)="resetForm()"
+        [disabled]="isSending">
+        <i class="fas fa-times"></i>
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="sendMessage()"
+        [disabled]="isSending">
+        <span *ngIf="isSending" class="loading-spinner"></span>
+        <i class="fas fa-paper-plane" *ngIf="!isSending"></i>
+        {{ isSending ? 'Enviando...' : 'Enviar Mensaje' }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de selección de grupos -->
+<div class="modal-overlay" *ngIf="showGroupsModal" (click)="closeGroupsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Seleccionar grupos</h3>
+      <button type="button" class="modal-close" (click)="closeGroupsModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- === Filtros === -->
+      <div class="modal-filters">
+        <div class="filter-group">
+          <label>Grado:</label>
+          <select [(ngModel)]="filterGrade">
+            <option value="">Todos los grados</option>
+            <option *ngFor="let grade of grades" [value]="grade">{{ grade }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Grupo:</label>
+          <select [(ngModel)]="filterGroup">
+            <option value="">Todos los grupos</option>
+            <option *ngFor="let group of groups" [value]="group">{{ group }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Turno:</label>
+          <select [(ngModel)]="filterShift">
+            <option value="">Todos los turnos</option>
+            <option *ngFor="let shift of shifts" [value]="shift">{{ shift }}</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Especialidad:</label>
+          <select [(ngModel)]="filterSpecialty">
+            <option value="">Todas las especialidades</option>
+            <option *ngFor="let specialty of specialties" [value]="specialty">{{ specialty }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- === Acciones masivas === -->
+      <div class="bulk-actions">
+        <button 
+          type="button" 
+          class="btn btn-outline btn-sm"
+          (click)="toggleAllGroups(true)">
+          <i class="fas fa-check-double"></i>
+          Seleccionar todos
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-outline btn-sm"
+          (click)="toggleAllGroups(false)">
+          <i class="fas fa-times-circle"></i>
+          Deseleccionar todos
+        </button>
+      </div>
+
+      <!-- === Lista de grupos === -->
+      <div class="groups-list">
+        <div 
+          *ngFor="let group of filteredGroups" 
+          class="group-item"
+          [class.selected]="group.selected"
+          (click)="toggleGroupSelection(group)">
+          <div class="group-checkbox">
+            <div class="checkbox-custom" [class.checked]="group.selected">
+              <i class="fas fa-check" *ngIf="group.selected"></i>
+            </div>
+          </div>
+          <div class="group-info">
+            <div class="group-name">{{ group.grade }} • {{ group.group }}</div>
+            <div class="group-details">{{ group.shift }} • {{ group.specialty }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- === Resumen de selección === -->
+      <div class="selection-summary">
+        {{ selectedGroupsCount }} de {{ filteredGroups.length || 0 }} grupos seleccionados
+      </div>
+    </div>
+
+    <!-- === Acciones === -->
+    <div class="modal-actions">
+      <button 
+        type="button" 
+        class="btn btn-outline"
+        (click)="closeGroupsModal()">
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        (click)="applyGroupSelection()">
+        <i class="fas fa-check"></i>
+        Aplicar selección
+      </button>
+    </div>
+  </div>
+</div>
+

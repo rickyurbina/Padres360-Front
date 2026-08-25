@@ -1,0 +1,36 @@
+<div class="modal-summary">
+    <div class="summary-item">
+        <span class="summary-label">Total de Alumnos:</span>
+        <span class="summary-value">{{ students.length }}</span>
+    </div>
+    <div class="summary-item">
+        <span class="summary-label">Total de incidencias:</span>
+        <span class="summary-value">{{ getTotalIncidences() }}</span>
+    </div>
+</div>
+
+<div class="teachers-list">
+    <div *ngFor="let teacher of students; let i = index" class="teacher-item">
+        <div class="teacher-rank">
+            <span class="rank-badge">{{ getRankBadge(i) }}</span>
+        </div>
+        <div class="teacher-info">
+            <h4 class="teacher-name">{{ teacher[0] }}</h4>
+            <p class="teacher-details">
+                {{ teacher[1] }} incidencia{{ teacher[1] !== 1 ? 's' : '' }} ·
+                {{ calculatePercentage(teacher[1]) }}% del total
+            </p>
+        </div>
+        <div class="teacher-stats">
+            <div class="stat-pill" [style.background]="getStatusColor(teacher[1])">
+                {{ teacher[1] }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-actions">
+    <button class="btn btn-primary" (click)="closeTeachersModal()">
+        Cerrar
+    </button>
+</div>

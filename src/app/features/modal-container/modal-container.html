@@ -1,0 +1,13 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+      <div class="modal-content" [class]="getModalSize()" (click)="$event.stopPropagation()">
+        <div class="modal-header" *ngIf="config?.title || config?.showClose !== false">
+          <h3>{{ config?.title || 'Modal' }}</h3>
+          <button class="modal-close" (click)="closeModal()" *ngIf="config?.showClose !== false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ng-container #modalContent></ng-container>
+        </div>
+      </div>
+    </div>

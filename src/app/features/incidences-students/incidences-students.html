@@ -1,0 +1,276 @@
+<div class="dashboard-container">
+  <!-- Tabla de incidencias -->
+  <div class="card">
+    <div style="
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+  ">
+
+      <!-- Título -->
+      <h2 style="margin: 0; display: flex; align-items: center;">
+        <i class="fas fa-book-open list-icon"></i>
+        Registro de Incidencias
+      </h2>
+
+      <!-- Contenedor flexible que empuja el input a la derecha -->
+      <div style="flex: 1; display: flex; justify-content: flex-end;">
+        <div style="position: relative; width: 300px;">
+          <i class="fas fa-search" style="
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: var(--muted);
+        ">
+          </i>
+
+          <input type="text" class="text-uppercase" [(ngModel)]="searchTerm" (input)="applyFilters()"
+            placeholder="Buscar" style="
+          width: 100%;
+          padding: 0.75rem 1rem 0.75rem 2.5rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem;
+          font-size: 0.95rem;
+        ">
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+         <button
+    class="btn btn-success"
+    type="button"
+    (click)="abrirModalFiltros()"
+    title="Filtros">
+    <i class="fa fa-filter" aria-hidden="true"></i>
+  </button>
+        <div class="dropdown">
+          <button class="btn btn-success dropdown-toggle" type="button" (click)="toggleExportDropdown()">
+            <i class="fa fa-download" aria-hidden="true"></i>
+          </button>
+          <ul class="dropdown-menu" *ngIf="showExportDropdown">
+            <li (click)="exportarExcelXlsx()">Excel (.xlsx)</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="overflow-x: auto;">
+
+<table id="tablaExportar" style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <!-- FILA DE FILTROS -->
+    <tr style="background-color: #f5f5f5;">
+      <th style="padding: 0.5rem;">
+        <div style="display: flex; align-items: center;">
+          <input 
+            type="text" 
+            [(ngModel)]="filtros.student_name" 
+            (ngModelChange)="applyFilters()"
+            placeholder="Filtrar alumno..."
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+          <button *ngIf="filtros.student_name" (click)="limpiarFiltro('student_name')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+      <th style="padding: 0.5rem;">
+        <div style="display: flex; align-items: center;">
+          <input 
+            type="text" 
+            [(ngModel)]="filtros.created_by_name" 
+            (ngModelChange)="applyFilters()"
+            placeholder="Filtrar creador..."
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+          <button *ngIf="filtros.created_by_name" (click)="limpiarFiltro('created_by_name')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+      <th style="padding: 0.5rem;">
+        <div style="display: flex; align-items: center;">
+          <input 
+            type="date" 
+            [(ngModel)]="filtros.created_at" 
+            (ngModelChange)="applyFilters()"
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+          <button *ngIf="filtros.created_at" (click)="limpiarFiltro('created_at')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+      <th style="padding: 0.5rem;">
+        <div style="display: flex; align-items: center;">
+          <select 
+            [(ngModel)]="filtros.incidence_name" 
+            (ngModelChange)="applyFilters()"
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+            <option value="">Todos los tipos</option>
+            <option *ngFor="let tipo of tiposIncidencia" [value]="tipo">{{ tipo }}</option>
+          </select>
+          <button *ngIf="filtros.incidence_name" (click)="limpiarFiltro('incidence_name')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+      <th style="padding: 0.5rem;">
+        <div style="display: flex; align-items: center;">
+          <input 
+            type="text" 
+            [(ngModel)]="filtros.observation" 
+            (ngModelChange)="applyFilters()"
+            placeholder="Filtrar observación..."
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+          <button *ngIf="filtros.observation" (click)="limpiarFiltro('observation')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+      <!-- NUEVO: Filtro para columna Leído -->
+      <th style="padding: 0.5rem; text-align: center;">
+        <div style="display: flex; align-items: center; justify-content: center;">
+          <select 
+            [(ngModel)]="filtros.is_read" 
+            (ngModelChange)="applyFilters()"
+            style="width: 100%; padding: 6px; border: 1px solid #ddd; border-radius: 4px;"
+          >
+            <option value="">Todos</option>
+            <option value="true">Leído</option>
+            <option value="false">No leído</option>
+          </select>
+          <button *ngIf="filtros.is_read" (click)="limpiarFiltro('is_read')" 
+                  style="margin-left: 4px; border: none; background: none; cursor: pointer;">×</button>
+        </div>
+      </th>
+    </tr>
+
+    <!-- FILA DE ORDENAMIENTO -->
+    <tr style="border-bottom: 2px solid color-mix(in oklab, var(--secondary) 15%, transparent);">
+      <th (click)="onSort('student_name')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+        Alumno <i class="fas fa-{{ getSortIcon('student_name') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+      <th (click)="onSort('created_by_name')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+        Creado por <i class="fas fa-{{ getSortIcon('created_by_name') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+      <th (click)="onSort('created_at')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+        Fecha <i class="fas fa-{{ getSortIcon('created_at') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+      <th (click)="onSort('incidence_name')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+        Tipo <i class="fas fa-{{ getSortIcon('incidence_name') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+      <th (click)="onSort('observation')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+        Observación <i class="fas fa-{{ getSortIcon('observation') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+      <!-- NUEVO: Columna Leído con ordenamiento -->
+      <th (click)="onSort('read')" style="cursor: pointer; padding: 0.75rem; text-align: center;">
+        Leído <i class="fas fa-{{ getSortIcon('read') }}" style="margin-left: 0.5rem;"></i>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let incidence of paginatedSubjects"
+      style="border-bottom: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);">
+      <td style="padding: 0.75rem;">
+        <span class="code-badge">{{ incidence.student_name }}</span>
+      </td>
+      <td style="padding: 0.75rem;">
+        <span class="code-badge">{{ incidence.created_by_name }}</span>
+      </td>
+      <td style="padding: 0.75rem; ">
+        <span>{{ incidence.created_at | date:'dd/MM/yyyy HH:mm:ss a' }}</span>
+      </td>
+      <td style="padding: 0.75rem; ">
+        <span>{{ incidence.incidence_name }}</span>
+      </td>
+      <td style="padding: 0.75rem;">{{ incidence.observation }}</td>
+      <!-- NUEVO: Icono para Leído/No leído -->
+      <td style="padding: 0.75rem; text-align: center;">
+        <i *ngIf="incidence.read" 
+           class="fas fa-check-circle" 
+           style="color: #28a745; font-size: 1.2rem; cursor: pointer;"
+           title="Leído"></i>
+        <i *ngIf="!incidence.read" 
+           class="fas fa-circle" 
+           style="color: #6c757d; font-size: 1.2rem; cursor: pointer;"
+           title="No leído"></i>
+      </td>
+    </tr>
+
+    <tr *ngIf="hasError">
+      <td colspan="6">
+        <div class="state-container error-state">
+          <div class="error-icon">
+            <img src="/img/error.svg" alt="Error" />
+          </div>
+          <h3>Error</h3>
+          <p>{{ errorMessage }}</p>
+          <a (click)="reloadData()" class="link-retry" href="javascript:void(0)">
+            Reintentar
+          </a>
+        </div>
+      </td>
+    </tr>
+
+    <tr *ngIf="isEmpty">
+      <td colspan="6">
+        <div class="state-container error-state">
+          <div class="empty-icon">
+            <div class="error-icon">
+              <img src="/img/noData.svg" alt="Error" />
+            </div>
+          </div>
+          <h3>No hay incidencias registradas</h3>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+      <div *ngIf="isLoading" class="state-container loading-state">
+        <div class="loading-center">
+          <div>
+            <div class="lottie-center-fix">
+              <ng-lottie [options]="loadingOptions" width="150px" height="150px">
+              </ng-lottie>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <div class="pagination-info">
+        <i class="fas fa-file-alt"></i> Mostrando {{ getDisplayRange() }} registros
+      </div>
+
+      <div class="pagination-controls">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1" class="btn btn-icon">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button *ngFor="let page of pagesArray" (click)="changePage(page)" [class.btn-primary]="currentPage === page"
+          class="btn btn-icon">
+          {{ page }}
+        </button>
+
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages" class="btn btn-icon">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span>Mostrar</span>
+          <select [(ngModel)]="itemsPerPage" (change)="changeItemsPerPage()">
+            <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+          <span>registros</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

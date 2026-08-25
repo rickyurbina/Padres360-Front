@@ -1,0 +1,4 @@
+<app-modal-container *ngIf="(modalService.modalState$ | async)?.isOpen"></app-modal-container>
+<app-confirmation-modal></app-confirmation-modal>
+
+<router-outlet />

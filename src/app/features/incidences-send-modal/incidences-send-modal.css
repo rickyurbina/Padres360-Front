@@ -1,0 +1,135 @@
+/* Estilos específicos para las pills de incidencias */
+.incidence-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.incidence-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: color-mix(in oklab, var(--secondary) 12%, transparent);
+  color: var(--secondary);
+  padding: 0.75rem 1.25rem;
+  border-radius: 2rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid color-mix(in oklab, var(--secondary) 30%, transparent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.incidence-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(251, 189, 72, 0.2);
+}
+
+.incidence-pill.selected {
+  background: var(--accent);
+  color: #5A4100;
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(251, 189, 72, 0.3);
+}
+
+.pill-text {
+  font-weight: 600;
+}
+
+.pill-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  color: var(--accent);
+}
+
+/* Efecto de pulso al hacer tap */
+.incidence-pill:active {
+  transform: scale(0.98);
+}
+
+/* Estados de deshabilitado */
+.incidence-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.incidence-pill:disabled:hover {
+  box-shadow: none;
+  border-color: color-mix(in oklab, var(--secondary) 30%, transparent);
+}
+
+/* Mensaje cuando no hay incidencias */
+.no-incidences {
+  text-align: center;
+  padding: 2rem;
+  color: var(--muted);
+  background: color-mix(in oklab, var(--bg) 50%, transparent);
+  border-radius: 1rem;
+  border: 2px dashed color-mix(in oklab, var(--secondary) 20%, transparent);
+}
+
+.no-incidences i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: color-mix(in oklab, var(--muted) 60%, transparent);
+}
+
+/* Contador de selección */
+.selection-count {
+  background: color-mix(in oklab, var(--secondary) 8%, transparent);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  color: var(--ink);
+  border: 1px solid color-mix(in oklab, var(--secondary) 15%, transparent);
+}
+
+.selection-count strong {
+  color: var(--secondary);
+  font-size: 1.1em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .incidence-pills {
+    gap: 0.5rem;
+  }
+  
+  .incidence-pill {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .modal-header h2 {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .incidence-pills {
+    justify-content: center;
+  }
+  
+  .incidence-pill {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .selection-count {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+}

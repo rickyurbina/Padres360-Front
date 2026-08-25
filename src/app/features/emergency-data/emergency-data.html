@@ -1,0 +1,162 @@
+<p class="modal-description">
+  Complete los datos médicos relevantes de
+  <strong>{{ selected?.firstName }}</strong> para uso escolar.
+</p>
+
+<div class="form-grid">
+  <!-- Tipo de sangre -->
+  <div class="form-group">
+    <label for="bloodType">Tipo de sangre</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="bloodType"
+      name="bloodType"
+      [(ngModel)]="emergencyData.bloodType"
+      placeholder="Ej. O+"
+    />
+  </div>
+
+  <!-- Alergias -->
+  <div class="form-group">
+    <label for="allergies">Alergias</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="allergies"
+      name="allergies"
+      [(ngModel)]="emergencyData.allergies"
+      placeholder="Ej. Penicilina, polen..."
+    />
+  </div>
+
+  <!-- Enfermedades crónicas -->
+  <div class="form-group">
+    <label for="chronicDiseases">Enfermedades crónicas</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="chronicDiseases"
+      name="chronicDiseases"
+      [(ngModel)]="emergencyData.chronicDiseases"
+      placeholder="Ej. Asma, diabetes..."
+    />
+  </div>
+
+  <!-- Medicamentos regulares -->
+  <div class="form-group">
+    <label for="regularMedications">Medicamentos regulares</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="regularMedications"
+      name="regularMedications"
+      [(ngModel)]="emergencyData.regularMedications"
+      placeholder="Ej. Salbutamol, insulina..."
+    />
+  </div>
+
+  <!-- Contacto de emergencia -->
+  <div class="form-group">
+    <label for="emergencyContacts">Contacto de emergencia</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="emergencyContacts"
+      name="emergencyContacts"
+      [(ngModel)]="emergencyData.emergencyContacts"
+      placeholder="Nombre del contacto"
+    />
+  </div>
+
+  <!-- Teléfono de emergencia -->
+  <div class="form-group">
+    <label for="emergencyPhoneNumbers">Teléfono de emergencia</label>
+    <input
+      type="text"
+      id="emergencyPhoneNumbers"
+      name="emergencyPhoneNumbers"
+      [(ngModel)]="emergencyData.emergencyPhoneNumbers"
+      placeholder="Ej. 614-123-4567"
+    />
+  </div>
+
+  <!-- Seguro médico -->
+  <div class="form-group">
+    <label for="medicalInsurance">Seguro médico</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="medicalInsurance"
+      name="medicalInsurance"
+      [(ngModel)]="emergencyData.medicalInsurance"
+      placeholder="Ej. IMSS, ISSSTE, Privado..."
+    />
+  </div>
+
+  <!-- Número de seguro -->
+  <div class="form-group">
+    <label for="insuranceNumber">Número de seguro</label>
+    <input
+      class="text-uppercase"
+      type="text"
+      id="insuranceNumber"
+      name="insuranceNumber"
+      [(ngModel)]="emergencyData.insuranceNumber"
+      placeholder="Ej. 1234567890"
+    />
+  </div>
+</div>
+
+<!-- Autorización para primeros auxilios -->
+<div class="form-group">
+  <label>Autorización para primeros auxilios</label>
+  <div class="radio-group">
+    <label>
+      <input
+        type="radio"
+        name="autorization"
+        [(ngModel)]="emergencyData.autorization"
+        [value]="true"
+      />
+      Sí
+    </label>
+    <label>
+      <input
+        type="radio"
+        name="autorization"
+        [(ngModel)]="emergencyData.autorization"
+        [value]="false"
+      />
+      No
+    </label>
+  </div>
+</div>
+
+<!-- Error general -->
+<div
+  *ngIf="hasFormError()"
+  style="
+    background-color: #fef2f2;
+    border-left: 4px solid #ef4444;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  "
+>
+  <p style="margin: 0; font-size: 0.9rem; color: #dc2626;">
+    <i class="fas fa-exclamation-triangle"></i>
+    <strong>Error:</strong> {{ formError }}
+  </p>
+</div>
+
+<!-- Pie del modal -->
+<div class="modal-actions">
+  <button class="btn btn-outline" type="button" (click)="limpiarFormulario()">
+    <i class="fas fa-eraser"></i> Limpiar
+  </button>
+  <button class="btn btn-primary" type="button" (click)="saveEmergencyData()">
+    <i class="fas fa-save"></i> Guardar
+  </button>
+</div>

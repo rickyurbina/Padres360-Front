@@ -1,0 +1,56 @@
+
+    <div class="report-container" id="studentsReport">
+      <!-- Encabezado del reporte -->
+      <div class="report-header">
+        <div class="header-content">
+          <img [src]="logoUrl" alt="Logo" class="logo" *ngIf="logoUrl">
+          <div class="title-section">
+            <h1>{{ title }}</h1>
+            <h2>{{ subtitle }}</h2>
+            <div class="report-info">
+              <p><strong>Fecha de generación:</strong> {{ generationDate | date:'dd/MM/yyyy HH:mm' }}</p>
+              <p><strong>Total de alumnos:</strong> {{ students.length }}</p>
+              <p *ngIf="filtersApplied"><strong>Filtros aplicados:</strong> {{ filtersDescription }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de alumnos (se repite por página automáticamente) -->
+      <table class="students-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Grado</th>
+            <th>Grupo</th>
+            <th>Turno</th>
+            <th>Especialidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students; let i = index">
+            <td>{{ student.ID }}</td>
+            <td>{{ student.Nombre }}</td>
+            <td>{{ student.Apellidos }}</td>
+            <td>{{ student.Grado }}</td>
+            <td>{{ student.Grupo }}</td>
+            <td>{{ student.Turno }}</td>
+            <td>{{ student.Especialidad }}</td>
+          </tr>
+          <tr *ngIf="students.length === 0">
+            <td colspan="7" class="no-data">No hay alumnos para mostrar</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Pie de página -->
+      <div class="report-footer">
+        <div class="footer-content">
+          <p>{{ footerText }}</p>
+          <div class="page-number"></div>
+        </div>
+      </div>
+    </div>
+  

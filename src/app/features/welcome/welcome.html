@@ -1,0 +1,45 @@
+<div class="welcome-minimal-container">
+  <!-- Contenido Principal Centrado -->
+  <div class="welcome-center">
+    
+    <!-- Avatar y Información Básica -->
+    <div class="user-avatar-section">
+      <div class="avatar-circle">
+        <span class="avatar-initial">{{ currentUser?.first_name.charAt(0) }}</span>
+      </div>
+    </div>
+
+    <!-- Saludo Principal -->
+    <div class="greeting-section">
+      <h1 class="main-greeting">
+        {{ getGreeting() }},
+      </h1>
+      <h1 class="user-name">{{ currentUser?.first_name }}</h1>
+    </div>
+
+    <!-- Rol del Usuario -->
+    <div class="role-section">
+      <div class="role-badge">
+        <span class="role-icon">👩‍💼</span>
+        <span class="role-text">{{ getUserLabel() }}</span>
+      </div>
+    </div>
+
+    <!-- Mensaje de Bienvenida Rotativo -->
+    <div class="message-section">
+      <div class="welcome-message">
+        <div class="message-icon">{{ getTimeIcon() }}</div>
+        <p class="message-text">{{ currentMessage }}</p>
+      </div>
+    </div>
+
+    <!-- Indicador de Mensajes -->
+    <div class="message-indicator">
+      <div *ngFor="let message of welcomeMessages; let i = index" 
+           class="indicator-dot" 
+           [class.active]="i === currentMessageIndex">
+      </div>
+    </div>
+
+  </div>
+</div>

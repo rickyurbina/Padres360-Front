@@ -1,0 +1,351 @@
+/* === Sidebar wrapper === */
+.dashboard-wrapper {
+    display: flex;
+    min-height: 100vh;
+    background: var(--bg);
+    position: relative; /* Importante para el contexto de z-index */
+}
+
+/* === Sidebar === */
+.sidebar {
+    width: 240px;
+    background: var(--white);
+    border-right: 1px solid color-mix(in oklab, var(--secondary) 10%, transparent);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100; /* Asegurar que sidebar esté por encima */
+}
+
+.sidebar * {
+    font-family: var(--font-heading), sans-serif;
+}
+
+.sidebar.collapsed {
+    width: 70px;
+    transition: width 0.3s ease;
+}
+
+/* === Header === */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    min-height: 40px;
+}
+
+.sidebar-header img {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+/* === Navegación === */
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* === Items, enlaces y submenús unificados === */
+.sidebar-item,
+.menu-item,
+.sidebar-nav a,
+.sidebar-submenu li a,
+.sidebar-footer a,
+.sidebar button.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    height: 40px;
+    padding: 0 1rem;
+    width: 100%;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;               /* grosor unificado */
+    color: var(--ink);
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.3s ease;
+}
+
+/* Hover y focus global */
+.sidebar-item:hover,
+.menu-item:hover,
+.sidebar-nav a:hover,
+.sidebar-submenu li a:hover,
+.sidebar-footer a:hover,
+.sidebar-item:focus,
+.menu-item:focus,
+.sidebar-nav a:focus,
+.sidebar-submenu li a:focus,
+.sidebar-footer a:focus,
+.sidebar button.sidebar-item:hover,
+.sidebar button.sidebar-item:focus,
+.sidebar button.sidebar-item:active {
+    color: var(--secondary);
+    background: transparent !important;
+    font-weight: 500; /* resalta un poco al pasar mouse */
+}
+
+/* === Grupo activo === */
+.sidebar-item-group.active {
+    background: #e0f2fe; /* azul claro */
+    border-radius: 8px;
+    padding: 0px 0px 8px 0px;
+}
+
+.sidebar-item-group.active > .sidebar-item {
+    background: transparent;
+    color: var(--ink);
+}
+
+/* Evitar recuadro negro en botones de grupo */
+.sidebar-item-group > button.sidebar-item,
+.sidebar-item-group > button.sidebar-item:focus,
+.sidebar-item-group > button.sidebar-item:hover,
+.sidebar-item-group > button.sidebar-item:active {
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* === Submenú === */
+.sidebar-submenu {
+    list-style: none;
+    margin: 4px 0 0 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Items del submenú */
+.sidebar-submenu li a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    transition: color 0.2s ease;
+}
+
+/* Hover y focus submenú */
+.sidebar-submenu li a:hover,
+.sidebar-submenu li a:focus {
+    color: var(--secondary);
+    font-weight: 600;
+    background: transparent !important;
+}
+
+/* === Iconos y flechas === */
+.sidebar-item .icon {
+    width: 18px;
+    height: 18px;
+}
+
+.sidebar-item .arrow {
+    margin-left: auto;
+    font-size: 12px;
+}
+
+/* === Footer === */
+.sidebar-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* === Perfil usuario === */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+}
+
+.user-profile img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    min-width: 36px;
+    min-height: 36px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info .name,
+.user-info .role {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* === Logout === */
+.logout {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.logout:hover {
+    color: var(--secondary);
+    background: transparent;
+}
+
+/* === Botón toggle - CORREGIDO === */
+.btn-toggle {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: -14px;
+    transform: translateY(-50%);
+    z-index: 1001; /* Mayor que el sidebar y main-content */
+    
+    /* Sombra estilo botones principales */
+    box-shadow: 0 8px 24px color-mix(in oklab, var(--secondary) 30%, transparent);
+    
+    /* Efectos hover */
+    transition: all 0.3s ease;
+    
+    &:hover {
+        transform: translateY(-50%) scale(1.1);
+        box-shadow: 0 12px 28px color-mix(in oklab, var(--secondary) 40%, transparent);
+    }
+    
+    /* Asegurar que sea clickeable */
+    pointer-events: auto;
+}
+
+/* === Sidebar colapsada: centrar iconos y ocultar texto === */
+.sidebar.collapsed .sidebar-item,
+.sidebar.collapsed .menu-item,
+.sidebar.collapsed .sidebar-footer a {
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+}
+
+.sidebar.collapsed .sidebar-item span,
+.sidebar.collapsed .menu-item span,
+.sidebar.collapsed .sidebar-footer a span {
+    display: none;
+}
+
+/* === Perfil usuario colapsada === */
+.sidebar.collapsed .user-profile {
+    justify-content: center;
+    padding: 0.75rem 0;
+    text-align: center;
+}
+
+.sidebar.collapsed .user-profile img {
+    margin: 0 auto;
+}
+
+.sidebar.collapsed .user-profile .user-info {
+    display: none;
+}
+
+/* === Submenús ocultos al colapsar === */
+.sidebar.collapsed .sidebar-submenu {
+    display: none !important;
+}
+
+/* === Submenús activos cuando la sidebar se expande === */
+.sidebar-item-group.active .sidebar-submenu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* === Foco global para eliminar recuadros */
+.sidebar-item:focus,
+.menu-item:focus,
+.sidebar-nav a:focus,
+.sidebar-submenu li a:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* === Main Content - CORREGIDO === */
+.main-content {
+    flex: 1;
+    padding: 1rem;
+    transition: margin-left 0.3s ease;
+    margin-left: 240px; /* igual al ancho del sidebar */
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    position: relative;
+    overflow: hidden;
+    z-index: 1; /* Menor que el btn-toggle */
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(251, 189, 72, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(22, 163, 74, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+        animation: float 6s ease-in-out infinite;
+        pointer-events: none; /* Para que no interfiera con los clicks */
+    }
+    
+    /* Asegurar que el contenido esté por encima del fondo */
+    & > * {
+        position: relative;
+        z-index: 2;
+    }
+}
+
+.sidebar.collapsed ~ .main-content {
+    margin-left: 70px; /* ancho cuando el sidebar está colapsado */
+}
+
+/* Animación del fondo flotante */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(1deg);
+    }
+}
+.sidebar-nav .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.sidebar-item, .menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

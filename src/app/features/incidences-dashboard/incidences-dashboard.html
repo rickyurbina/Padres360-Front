@@ -1,0 +1,194 @@
+<!-- Estado de carga -->
+<div *ngIf="state === 'loading'" class="loading-overlay">
+  <div class="loading-center">
+    <div >
+      <div class="lottie-center-fix">
+        <ng-lottie 
+          [options]="loadingOptions"
+          width="150px"
+          height="150px">
+        </ng-lottie>
+      </div>
+      <h2 class="loading-title">Cargando datos...</h2>
+      <p class="loading-text">Por favor, espera mientras cargamos la información de incidencias</p>
+    </div>
+  </div>
+</div>
+
+<!-- Estado de error -->
+<div *ngIf="state === 'error'" class="error-container">
+  <div class="error-content">
+    <div class="error-icon">
+      <img src="/img/error.svg" alt="Error" />
+    </div>
+    <h2>Error al cargar los datos</h2>
+    <p>No se pudieron cargar las incidencias. Por favor, intenta de nuevo.</p>
+    <button (click)="retry()" class="btn btn-primary">
+      Reintentar
+    </button>
+  </div>
+</div>
+
+<div class="dashboard-container" *ngIf="state === 'loaded'">
+  
+  <!-- Header del Dashboard -->
+  <div class="dashboard-header">
+    <h1>Resumen de Incidencias</h1>
+    <p>Gestión y análisis de incidencias reportadas</p>
+  </div>
+
+  <!-- Tarjeta de Resumen General -->
+  <div class="card summary-card">
+    <div class="summary-header">
+      <div class="summary-info">
+        <h2>Resumen del Mes</h2>
+        <p class="period-text">Período: {{ getPeriodText() }}</p>
+      </div>
+      <div class="incidence-count">
+        <span class="count-number">{{ filteredIncidences.length }}</span>
+        <span class="count-label">incidencias</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card filters-card">
+    <h3 class="section-title">Elegir periodo</h3>
+    <div class="filters-grid">
+      <div class="filter-group">
+        <label>Año</label>
+        <select 
+          [(ngModel)]="selectedYear" 
+          (change)="onFilterChange()"
+          class="filter-select">
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label>Mes</label>
+        <select 
+          [(ngModel)]="selectedMonth" 
+          (change)="onFilterChange()"
+          class="filter-select">
+          <option *ngFor="let month of months" [value]="month.value">
+            {{ month.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de Métricas -->
+  <div class="metrics-grid">
+    <div class="metric-card metric-card--blue">
+      <div class="metric-card__icon">📊</div>
+      <div class="metric-card__content">
+        <h3>Total Incidencias</h3>
+        <div class="metric-card__value">{{ filteredIncidences.length }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--green">
+      <div class="metric-card__icon">👨‍🏫</div>
+      <div class="metric-card__content">
+        <h3>Docentes Involucrados</h3>
+        <div class="metric-card__value">{{ teacherSummary.size }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--orange">
+      <div class="metric-card__icon">🕵️</div>
+      <div class="metric-card__content">
+        <h3>Prefectos Activos</h3>
+        <div class="metric-card__value">{{ reporterSummary.size }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--purple">
+      <div class="metric-card__icon">📝</div>
+      <div class="metric-card__content">
+        <h3>Tipos de Incidencia</h3>
+        <div class="metric-card__value">{{ typeSummary.size }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid de Contenido -->
+  <div class="content-grid">
+    
+    <!-- Tipos de Incidencias -->
+    <div class="card" *ngIf="sortedTypes.length > 0">
+      <h2>Tipos Comunes</h2>
+      <div class="stats-list">
+        <div *ngFor="let type of sortedTypes; let i = index" class="stat-item">
+          <div class="stat-main">
+            <div class="stat-header">
+              <span class="stat-badge" [style.background]="getStatusColor(type[1])"></span>
+              <span class="stat-title">{{ type[0] }}</span>
+            </div>
+            <span class="stat-count">{{ type[1] }} inc.</span>
+          </div>
+          <div class="stat-percentage">
+            {{ calculatePercentage(type[1]) }}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Docentes con Más Incidencias -->
+    <div class="card" *ngIf="sortedTeachers.length > 0">
+      <div class="card-header">
+        <h2>Por Docente</h2>
+        <button *ngIf="teacherSummary.size > 5" 
+                (click)="showTeacherModal()"  
+                class="btn btn-outline btn-sm">
+          Ver todos
+        </button>
+      </div>
+      <div class="stats-list">
+        <div *ngFor="let teacher of sortedTeachers; let i = index" class="stat-item">
+          <div class="stat-main">
+            <div class="stat-header">
+              <i *ngIf="i < 3" class="medal-icon" [style.color]="getMedalColor(i)">🏆</i>
+              <span class="stat-title">{{ abbreviateName(teacher[0]) }}</span>
+            </div>
+            <span class="stat-count">{{ teacher[1] }} inc.</span>
+          </div>
+          <div class="stat-percentage">
+            {{ calculatePercentage(teacher[1]) }}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quienes Reportan Más -->
+    <div class="card" *ngIf="sortedReporters.length > 0">
+      <h2>Por Prefecto</h2>
+      <div class="stats-list">
+        <div *ngFor="let reporter of sortedReporters; let i = index" class="stat-item">
+          <div class="stat-main">
+            <div class="stat-header">
+              <span class="stat-badge" [style.background]="'var(--primary)'"></span>
+              <span class="stat-title">{{ abbreviateName(reporter[0]) }}</span>
+            </div>
+            <span class="stat-count">{{ reporter[1] }} inc.</span>
+          </div>
+          <div class="stat-percentage">
+            {{ calculatePercentage(reporter[1]) }}%
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Acción Principal -->
+  <div class="action-section" *ngIf="hasAccess(Functionality.ReporteIncidAlumno)">
+    <button (click)="viewAllIncidences()" class="btn btn-primary btn-large">
+      <span class="btn-icon">📋</span>
+      Ver todas las Incidencias
+    </button>
+  </div>
+
+</div>

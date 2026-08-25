@@ -1,0 +1,125 @@
+<div class="dashboard-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed()">
+    <!-- Header -->
+    <div class="sidebar-header">
+      <img src="/img/logo.png" alt="Padres 360" class="icon" />
+      <h2 class="text-2xl" *ngIf="!isSidebarCollapsed()">Padres 360</h2>
+      <button class="btn-toggle" (click)="toggleSidebar()">
+        {{ isSidebarCollapsed() ? '→' : '←' }}
+      </button>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="sidebar-nav"> 
+      <!-- Docentes -->
+      <div class="sidebar-item-group" 
+        *ngIf="hasAnyAccess(teacherMenu)"
+        [class.active]="isSubmenuOpen('teachers')"> 
+        <button class="sidebar-item"
+          (click)="toggleSubmenu('teachers')"> 
+          <img src="/ico/teacher.svg" alt="Reportes" class="icon" /> 
+          <span class="label" *ngIf="!isSidebarCollapsed()">Docentes</span> 
+          <span class="arrow" *ngIf="!isSidebarCollapsed()"> 
+            <img *ngIf="!isSubmenuOpen('teachers')" src="/ico/downArrow.svg" width="16" height="16"> 
+            <img *ngIf="isSubmenuOpen('teachers')" src="/ico/upArrow.svg" width="16" height="16">
+          </span> 
+        </button>
+        <ul class="sidebar-submenu" *ngIf="isSubmenuOpen('teachers')">
+          <li *ngIf="hasAnyAccess(dashTeacher)"><a routerLink="/dashboard/dashboard-incidendes">Dashboard</a></li>
+          <li *ngIf="hasAnyAccess(adminTeacher)"><a routerLink="/dashboard/teachers">Gestion</a></li>
+          <li *ngIf="hasAccess(Functionality.ReporteIncidCapturadasDocentes)"><a routerLink="/dashboard/incidences">Reporte de incidencias</a></li>
+          <li *ngIf="hasAccess(Functionality.RepIncidPorDocente)"><a routerLink="/dashboard/incidencesByTeacher">Incidencias por docente</a></li>
+          <li *ngIf="hasAccess(Functionality.MisIncidenciasDocentes)"><a routerLink="/dashboard/incidencesByPrefect">Mis Incidencias reportadas</a></li>
+        </ul>
+      </div> 
+      <!-- Fin Docentes--> 
+      <!-- Mensajería -->
+      <div class="sidebar-item-group" 
+          [class.active]="isSubmenuOpen('messages')"
+          *ngIf="hasAnyAccess(messageMenu)"> 
+          <button class="sidebar-item"
+            (click)="toggleSubmenu('messages')"> <img src="/ico/messageSender.svg" alt="Mensajería" class="icon" /> <span
+            class="label" *ngIf="!isSidebarCollapsed()">Mensajería</span> <span class="arrow"
+            *ngIf="!isSidebarCollapsed()"> <img *ngIf="!isSubmenuOpen('messages')" src="/ico/downArrow.svg" width="16"
+              height="16"> <img *ngIf="isSubmenuOpen('messages')" src="/ico/upArrow.svg" width="16" height="16"> </span>
+        </button>
+        <ul class="sidebar-submenu" *ngIf="isSubmenuOpen('messages')">
+          <li *ngIf="hasAccess(Functionality.MensajeGeneral)"><a routerLink="/dashboard/message-sender">Mensajes a Grupos</a> </li>
+        </ul>
+      </div>
+      <!-- Fin Mensajería-->
+      <!-- Alumnos  -->
+      <div 
+        class="sidebar-item-group" 
+        *ngIf="hasAnyAccess(studentMenu)"
+        [class.active]="isSubmenuOpen('students')"> 
+        <button class="sidebar-item" (click)="toggleSubmenu('students')"> 
+          <img src="/ico/student.svg" alt="Mensajería" class="icon" /> 
+          <span class="label" *ngIf="!isSidebarCollapsed()">Alumnos</span> 
+          <span class="arrow" *ngIf="!isSidebarCollapsed()"> 
+            <img *ngIf="!isSubmenuOpen('students')" src="/ico/downArrow.svg" width="16" height="16"> 
+            <img *ngIf="isSubmenuOpen('students')" src="/ico/upArrow.svg" width="16" height="16"> 
+          </span>
+        </button>
+        <ul class="sidebar-submenu" *ngIf="isSubmenuOpen('students')">
+          <li *ngIf="hasAnyAccess(dashStudent)"><a routerLink="/dashboard/dashdoard-incidencies-student">Dashboard</a></li>
+          <li *ngIf="hasAnyAccess(adminStudent)"><a routerLink="/dashboard/students">Gestion</a></li>
+          <li *ngIf="hasAccess(Functionality.ReporteIncidAlumno)"><a routerLink="/dashboard/incidences-students">Reporte incidencias</a></li>
+          <li *ngIf="hasAccess(Functionality.MisIncidenciasRegistradasAlumnos)"><a routerLink="/dashboard/incidences-students-by-teacher">Mis incidencias registradas</a></li>
+        </ul>
+      </div>
+      <!-- Fin Mensajería-->
+      <!-- Dashboard -->
+      
+      <a 
+        routerLink="/dashboard/my-children" 
+        *ngIf="hasAnyAccess(myChildrenMenu)"
+        class="menu-item"> 
+        <img 
+        src="/ico/childrend.svg" 
+        alt="Datos de emergencia"
+        class="icon" /> 
+        <span class="label" *ngIf="!isSidebarCollapsed()">Mis hijos</span>
+      </a>
+      <a 
+        *ngIf="hasAnyAccess(groupMenu)"
+        routerLink="/dashboard/groups" class="menu-item"> 
+        <img src="/ico/group.svg" alt="Grupos" class="icon" /> 
+        <span
+          class="label" 
+          *ngIf="!isSidebarCollapsed()">Grupos</span>
+      </a>
+      <a 
+        *ngIf="hasAnyAccess(parentsMenu)"
+        routerLink="/dashboard/parents" class="menu-item"> <img src="/ico/parents.svg" alt="Padres" class="icon" /> <span
+          class="label" *ngIf="!isSidebarCollapsed()">Padres</span>
+      </a>
+    </nav>
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <img [src]="currentUser?.avatarUrl || '/img/avatar.svg'" alt="Usuario" (click)="editProfile()" />
+        <div class="user-info" *ngIf="!isSidebarCollapsed()">
+          <span class="name">{{ currentUser?.first_name || '' }}</span>
+          <span class="label">{{ getUserLabel() }}</span>
+        </div>
+      </div>
+
+      <!-- <a routerLink="/settings" class="menu-item">
+        <img src="/ico/settings.svg" class="icon" />
+        <span class="label" *ngIf="!isSidebarCollapsed()">Settings</span>
+      </a>
+-->
+      <a (click)="logout()" class="menu-item logout">
+        <img src="/ico/logout.svg" class="icon" />
+        <span class="label" *ngIf="!isSidebarCollapsed()">Log out</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

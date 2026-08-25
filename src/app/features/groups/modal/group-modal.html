@@ -1,0 +1,66 @@
+<div class="modal-body">
+    <!-- Grado (int 1-6) -->
+    <div class="form-group">
+        <label class="inline-label">
+            Grado <span class="required" style="color: red;">*</span>
+        </label>
+        <input type="number" [(ngModel)]="formGroup.grade" (input)="onGradeInput($event)" class="form-control"
+            [class.is-invalid]="formErrors.grade" placeholder="Ej: 1" min="1" max="6">
+        <div class="error-message" *ngIf="formErrors.grade">
+            <i class="fas fa-exclamation-circle"></i> {{ formErrors.grade }}
+        </div>
+    </div>
+
+    <!-- Nombre (varchar 10) -->
+    <div class="form-group">
+        <label class="inline-label">
+            Grupo <span style="color: red;">*</span>
+        </label>
+        <input type="text" [(ngModel)]="formGroup.group" (input)="onGroupInput($event)" class="form-control text-uppercase"
+            [class.is-invalid]="formErrors.group" placeholder="Ej: A" maxlength="10">
+        <small style="color: var(--muted); font-size: 0.85rem;">
+            {{ formGroup.group.length }}/10 caracteres
+        </small>
+        <div class="error-message" *ngIf="formErrors.group">
+            <i class="fas fa-exclamation-circle"></i> {{ formErrors.group }}
+        </div>
+    </div>
+
+    <!-- Turno (select) -->
+    <div class="form-group">
+        <label class="inline-label">
+            Turno <span style="color: red;">*</span>
+        </label>
+        <select [(ngModel)]="formGroup.shift" class="form-control" [class.is-invalid]="formErrors.shift">
+            <option value="">Seleccione un turno</option>
+            <option *ngFor="let shift of shiftOptions" [value]="shift">{{ shift }}</option>
+        </select>
+        <div class="error-message" *ngIf="formErrors.shift">
+            <i class="fas fa-exclamation-circle"></i> {{ formErrors.shift }}
+        </div>
+    </div>
+
+    <!-- Especialidad (varchar 100) -->
+    <div class="form-group">
+        <label class="inline-label">
+            Especialidad <span style="color: red;">*</span>
+        </label>
+        <input type="text" [(ngModel)]="formGroup.specialty" (input)="onSpecialtyInput($event)" class="form-control text-uppercase"
+            [class.is-invalid]="formErrors.specialty" placeholder="Ej: Programación" maxlength="100">
+        <small style="color: var(--muted); font-size: 0.85rem;">
+            {{ formGroup.specialty.length }}/100 caracteres
+        </small>
+        <div class="error-message" *ngIf="formErrors.specialty">
+            <i class="fas fa-exclamation-circle"></i> {{ formErrors.specialty }}
+        </div>
+    </div>
+</div>
+
+<div class="modal-actions">
+    <button class="btn btn-outline" (click)="close()">
+        <i class="fas fa-times"></i> Cancelar
+    </button>
+    <button class="btn btn-primary" (click)="guardarGrupo()">
+        <i class="fas fa-save"></i> {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+    </button>
+</div>

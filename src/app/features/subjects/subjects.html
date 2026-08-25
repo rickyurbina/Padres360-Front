@@ -1,0 +1,298 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1><i class="fas fa-book-open list-icon"></i> Gestión de Materias</h1>
+    <p>Administra la información de las materias disponibles en el sistema</p>
+  </div>
+
+  <!-- Tarjetas de métricas -->
+  <div class="metrics-grid">
+    <div class="metric-card metric-card--blue">
+      <div class="metric-card__icon">
+        <i class="fas fa-book"></i>
+      </div>
+      <div class="metric-card__content">
+        <h3>Total Materias</h3>
+        <div class="metric-card__value">{{ subjects.length }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--green">
+      <div class="metric-card__icon">
+        <i class="fas fa-chalkboard-teacher"></i>
+      </div>
+      <div class="metric-card__content">
+        <h3>Materias Activas</h3>
+        <div class="metric-card__value">{{ getActiveSubjectsCount() }}</div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--orange">
+      <div class="metric-card__icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="metric-card__content">
+        <h3>Total Inscripciones</h3>
+        <div class="metric-card__value">
+          {{ getTotalEnrollments() }}
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card metric-card--purple">
+      <div class="metric-card__icon">
+        <i class="fas fa-graduation-cap"></i>
+      </div>
+      <div class="metric-card__content">
+        <h3>Profesores</h3>
+        <div class="metric-card__value">
+          {{ getUniqueProfessorsCount() }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Controles de búsqueda y acciones -->
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+      <div style="position: relative; flex: 1; min-width: 250px;">
+        <i class="fas fa-search"
+          style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted);"></i>
+        <input type="text" class="text-uppercase" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Buscar materias..."
+          style="padding-left: 2.5rem;">
+      </div>
+
+      <button class="btn btn-primary" (click)="openCreateModal()">
+        <i class="fas fa-plus"></i> Nueva Materia
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla de materias -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2><i class="fas fa-list list-icon"></i> Lista de Materias</h2>
+
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" (click)="toggleExportDropdown()">
+          <i class="fas fa-file-export"></i> Exportar
+        </button>
+        <ul class="dropdown-menu" *ngIf="showExportDropdown">
+          <li (click)="exportarExcelXlsx()">Excel (.xlsx)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table id="tablaExportar" style="width: 100%; border-collapse: collapse;">
+        <thead>
+          <tr style="border-bottom: 2px solid color-mix(in oklab, var(--secondary) 15%, transparent);">
+            <th (click)="onSort('name')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Nombre <i class="fas fa-{{ getSortIcon('name') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('code')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Código <i class="fas fa-{{ getSortIcon('code') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('credits')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Créditos <i class="fas fa-{{ getSortIcon('credits') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('professor')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Profesor <i class="fas fa-{{ getSortIcon('professor') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('schedule')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Horario <i class="fas fa-{{ getSortIcon('schedule') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('enrollmentCount')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Inscritos <i class="fas fa-{{ getSortIcon('enrollmentCount') }}"
+                style="margin-left: 0.5rem;"></i>
+            </th>
+            <th (click)="onSort('status')" style="cursor: pointer; padding: 0.75rem; text-align: left;">
+              Estado <i class="fas fa-{{ getSortIcon('status') }}" style="margin-left: 0.5rem;"></i>
+            </th>
+            <th style="padding: 0.75rem; text-align: center;">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let subject of paginatedSubjects"
+            style="border-bottom: 1px solid color-mix(in oklab, var(--secondary) 8%, transparent);">
+            <td style="padding: 0.75rem;">
+              <i class="fas fa-book subject-icon"></i> {{ subject.name }}
+            </td>
+            <td style="padding: 0.75rem;">
+              <span class="code-badge">{{ subject.code }}</span>
+            </td>
+            <td style="padding: 0.75rem; text-align: center;">
+              <span class="credits-badge">{{ subject.credits }}</span>
+            </td>
+            <td style="padding: 0.75rem;">
+              <i class="fas fa-user-tie professor-icon"></i> {{ subject.professor }}
+            </td>
+            <td style="padding: 0.75rem;">
+              <i class="fas fa-clock schedule-icon"></i> {{ subject.schedule }}
+            </td>
+            <td style="padding: 0.75rem; text-align: center;">
+              <span class="enrollment-badge">{{ subject.enrollmentCount }}</span>
+            </td>
+            <td style="padding: 0.75rem;">
+              <span [class]="getStatusClass(subject.status)"
+                style="padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.85rem;">
+                <i class="fas fa-circle status-icon"></i> {{ subject.status === 'active' ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+            <td style="padding: 0.75rem; text-align: center;">
+              <button (click)="editSubject(subject)" class="btn btn-icon" title="Editar">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button (click)="deleteSubject(subject)" class="btn btn-icon btn-danger" title="Eliminar">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="hasError">
+            <td colspan="8">
+              <div class="state-container error-state">
+                <div class="error-icon">
+                  <img src="/img/error.svg" alt="Error" />
+                </div>
+                <h3>Error</h3>
+                <p>{{ errorMessage }}</p>
+                <a (click)="reloadData()" class="link-retry" href="javascript:void(0)">
+                  Reintentar
+                </a>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Estado: Vacío -->
+          <tr *ngIf="isEmpty">
+            <td colspan="8">
+              <div class="state-container error-state">
+                <div class="empty-icon"><div class="error-icon">
+                  <img src="/img/noData.svg" alt="Error" />
+                </div></div>
+                <h3>No hay materias registradas</h3>
+                <p>Comienza agregando una nueva materia al sistema.</p>
+              </div>
+            </td>
+          </tr>
+          <div *ngIf="isLoading" class="state-container loading-state">
+            <div class="spinner"></div>
+            <p>Cargando materias...</p>
+          </div>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <div class="pagination-info">
+        <i class="fas fa-file-alt"></i> Mostrando {{ getDisplayRange() }} registros
+      </div>
+
+      <div class="pagination-controls">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1" class="btn btn-icon">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <button *ngFor="let page of pagesArray" (click)="changePage(page)" [class.btn-primary]="currentPage === page"
+          class="btn btn-icon">
+          {{ page }}
+        </button>
+
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages" class="btn btn-icon">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span>Mostrar</span>
+          <select [(ngModel)]="itemsPerPage" (change)="changeItemsPerPage()">
+            <option *ngFor="let option of itemsPerPageOptions" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+          <span>registros</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para creación/edición -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="preventClose($event)">
+      <div class="modal-header">
+        <h2><i class="fas fa-plus-circle"></i> {{ isEditing ? 'Editar Materia' : 'Nueva Materia' }}</h2>
+        <button class="modal-close" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form (ngSubmit)="submitForm()" class="modal-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-font"></i> Nombre de la materia</span>
+              <input type="text" class="text-uppercase" [(ngModel)]="formModel.name" name="name" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-hashtag"></i> Código</span>
+              <input type="text" class="text-uppercase" [(ngModel)]="formModel.code" name="code" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-star"></i> Créditos</span>
+              <input type="number" [(ngModel)]="formModel.credits" name="credits" min="0" max="10" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-user-tie"></i> Profesor</span>
+              <input type="text" class="text-uppercase" [(ngModel)]="formModel.professor" name="professor" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-clock"></i> Horario</span>
+              <input type="text"  class="text-uppercase"[(ngModel)]="formModel.schedule" name="schedule"
+                placeholder="Ej: Lunes y Miércoles 10:00-12:00" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-user-graduate"></i> Estudiantes inscritos</span>
+              <input type="number" class="text-uppercase" [(ngModel)]="formModel.enrollmentCount" name="enrollmentCount" min="0" required>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>
+              <span><i class="fas fa-circle"></i> Estado</span>
+              <select [(ngModel)]="formModel.status" name="status" required>
+                <option value="active">Activa</option>
+                <option value="inactive">Inactiva</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn" (click)="closeModal()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> {{ isEditing ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

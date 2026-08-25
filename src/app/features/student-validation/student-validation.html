@@ -1,0 +1,296 @@
+<!-- student-validation.html -->
+<div class="student-validation-container">
+  <!-- Desktop TopAppBar -->
+  <header class="header-container">
+    <div class="header-inner">
+      <div class="logo-left">
+        <img alt="Padres360 Logo" class="object-contain" src="img/Logo.jpg">
+      </div>
+      <div class="logo-right">
+        <img alt="School Logo" class="object-contain" src="img/cbtis.jpeg">
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- Title -->
+    <h1 class="page-title">Validación de Información</h1>
+
+    <!-- Full-width Search Section (CURP) -->
+    <section class="search-section">
+      <div class="search-card">
+        <div class="search-grid">
+          <div class="full-width">
+            <label class="form-label" for="school-select">ESCUELA</label>
+            <div class="relative">
+              <select id="school-select" class="form-select" [(ngModel)]="selectedSchool" style="
+                  width: 100%;
+                  background-color: #ffffff;
+                  border: 1px solid #bfc7d1;
+                  border-radius: 0.5rem;
+                  height: 48px;
+                  padding: 0 40px 0 16px;
+                  font-family: 'Inter', sans-serif;
+                  font-size: 16px;
+                  font-weight: 400;
+                  line-height: 24px;
+                  color: #181c20;
+                  transition: all 0.2s ease-in-out;
+                  outline: none;
+                  appearance: none;
+                  -webkit-appearance: none;
+                  -moz-appearance: none;
+                  background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236f7881' d='M6 8L1 3h10z'/%3E%3C/svg%3E&quot;);
+                  background-repeat: no-repeat;
+                  background-position: right 16px center;
+                  background-size: 12px;
+                  box-sizing: border-box;
+                  cursor: pointer;
+                ">
+                <option value="CBTis 117">CBTis 117</option>
+              </select>
+            </div>
+          </div>
+          <div class="full-width">
+            <label class="form-label" for="curp-search">CURP EN MAYÚSCULAS</label>
+            <div class="relative">
+              <input class="form-input curp-input" id="curp-search" placeholder="18 caracteres sin esp." type="text"
+                [(ngModel)]="curpSearch" maxlength="18" (input)="onCurpInput($event)">
+            </div>
+          </div>
+          <button class="btn-primary-custom" (click)="loadData()" [disabled]="isLoadingData">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 4v6h-6" />
+              <path d="M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            {{ isLoadingData ? 'CARGANDO...' : 'CARGAR DATOS' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Balanced Grid Layout for Forms -->
+    <div class="form-grid">
+      <!-- Datos del Alumno -->
+      <section class="section-spacing">
+        <div class="section-header">
+          <div class="section-header-left">
+            <div class="section-icon primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h2 class="section-title">Datos del Alumno</h2>
+          </div>
+          <span class="section-step primary">PASO 1/2</span>
+        </div>
+        <div class="form-card">
+          <div class="space-y-md">
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">CURP</label>
+                <input 
+                  type="text" 
+                  class="form-input" 
+                  [(ngModel)]="student.curp" 
+                  name="studentCurp"
+                  maxlength="18" 
+                  placeholder="CURP (18 caracteres)"
+                  (input)="onStudentCurpInput($event)"
+                />
+                <small class="help-text">18 caracteres en mayúsculas</small>
+              </div>
+              <div class="form-group">
+                <label class="form-label">NOMBRE(S)</label>
+                <input class="form-input" type="text" [(ngModel)]="student.name" placeholder="Nombre del alumno">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">APELLIDO PATERNO</label>
+                <input class="form-input" type="text" [(ngModel)]="student.lastName" placeholder="Apellido paterno">
+              </div>
+              <div class="form-group">
+                <label class="form-label">APELLIDO MATERNO</label>
+                <input class="form-input" type="text" [(ngModel)]="student.motherLastName" placeholder="Apellido materno">
+              </div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">NÚMERO DE CONTROL</label>
+                <input class="form-input" readonly type="text" [(ngModel)]="student.controlNumber" placeholder="08123456">
+              </div>
+              <div class="form-group">
+                <label class="form-label">GRUPO</label>
+                <div class="relative">
+                  <select class="form-select" (ngModelChange)="onGroupSelect($event)" [(ngModel)]="selectedGroup">
+                    <option [ngValue]="null">Selecciona un grupo</option>
+                    <option *ngFor="let group of groups" [ngValue]="group">
+                      {{ group.group }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Datos del Padre - VERSIÓN REORGANIZADA -->
+      <section class="section-spacing">
+        <div class="section-header">
+          <div class="section-header-left">
+            <div class="section-icon secondary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <h2 class="section-title">Datos del Padre / Tutor</h2>
+          </div>
+          <span class="section-step secondary">PASO 2/2</span>
+        </div>
+        <div class="form-card">
+          <!-- Selector de padres -->
+          <div class="parent-selector-section">
+            <div class="form-group">
+              <label class="form-label">SELECCIONAR PADRE/TUTOR</label>
+              <div class="relative">
+                <select class="form-select" (ngModelChange)="onParentSelect($event)" [(ngModel)]="selectedParent" style="
+                    width: 100%;
+                    background-color: #ffffff;
+                    border: 1px solid #bfc7d1;
+                    border-radius: 0.5rem;
+                    height: 48px;
+                    padding: 0 40px 0 16px;
+                    font-family: 'Inter', sans-serif;
+                    font-size: 16px;
+                    font-weight: 400;
+                    line-height: 24px;
+                    color: #181c20;
+                    transition: all 0.2s ease-in-out;
+                    outline: none;
+                    appearance: none;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236f7881' d='M6 8L1 3h10z'/%3E%3C/svg%3E&quot;);
+                    background-repeat: no-repeat;
+                    background-position: right 16px center;
+                    background-size: 12px;
+                    box-sizing: border-box;
+                    cursor: pointer;
+                  ">
+                  <option [ngValue]="null">Selecciona un padre/tutor</option>
+                  <option *ngFor="let parent of parentsList" [ngValue]="parent">
+                    {{ parent.fullName }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Información Personal del Padre -->
+          <div class="parent-form-section">
+            <div class="subsection-title">
+              <span class="subsection-indicator"></span>
+            </div>
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">NOMBRE(S)</label>
+                <input class="form-input" type="text" [(ngModel)]="selectedParent.firstName"
+                  placeholder="Nombre del padre">
+              </div>
+              <div class="form-group">
+                <label class="form-label">APELLIDOS</label>
+                <input class="form-input" type="text" [(ngModel)]="selectedParent.surnames" placeholder="Apellidos">
+              </div>
+            </div>
+          </div>
+
+          <!-- Información de Contacto -->
+          <div class="parent-form-section">
+            <div class="subsection-title">
+              <span class="subsection-indicator contact"></span>
+            </div>
+            
+            <div class="form-row-2">
+              <div class="form-group">
+                <label class="form-label">CORREO ELECTRÓNICO</label>
+                <div class="input-with-icon">
+                  <input class="form-input with-icon" type="email" [(ngModel)]="selectedParent.email"
+                    placeholder="correo@ejemplo.com">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">TELÉFONO CELULAR</label>
+                <div class="input-with-icon">
+                  <input class="form-input with-icon" type="tel" [(ngModel)]="selectedParent.phone" placeholder="6255813138">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credenciales de Acceso -->
+          <div class="parent-form-section">
+            <div class="subsection-title">
+              <span class="subsection-indicator security"></span>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">CONTRASEÑA</label>
+              <div class="password-wrapper">
+                <input class="form-input" [type]="showPassword ? 'text' : 'password'"
+                  [(ngModel)]="selectedParent.password" placeholder="Contraseña">
+                <span class="password-toggle" (click)="togglePasswordVisibility()">
+                  <svg *ngIf="showPassword" class="toggle-icon" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <svg *ngIf="!showPassword" class="toggle-icon" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Desktop Persistent Actions Bar -->
+  <footer class="sticky-footer">
+    <div class="footer-inner">
+      <div class="footer-left"></div>
+      <div class="footer-actions">
+        <button class="btn-cancel" (click)="cancel()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+          CANCELAR
+        </button>
+        <button class="btn-save" (click)="saveChanges()" [disabled]="isSaving">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+            <polyline points="17 21 17 13 7 13 7 21" />
+            <polyline points="7 3 7 8 15 8" />
+          </svg>
+          {{ isSaving ? 'GUARDANDO...' : 'GUARDAR CAMBIOS' }}
+        </button>
+      </div>
+    </div>
+  </footer>
+</div>
