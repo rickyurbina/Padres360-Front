@@ -201,41 +201,55 @@ export class GroupService {
 
     }
 
+    // getGroupsBySchool(schoolId: number): Observable<Group[]> {
+    //     const token = localStorage.getItem('auth_token');
+    //     const headers = { Authorization: `Bearer ${token}` };
+    //     const url = `${GROUP_URLS.GROUPS_BY_SCHOOL}?school_id=${schoolId}`;
+
+    //     return this.http.get<any>(url, { headers }).pipe(
+    //         map(response => {
+
+    //             if (!environment.production) {
+    //                 console.log('Respuesta completa:', response);
+    //             }
+
+    //             let rawGroups: any[] = [];
+
+    //             if (response && response.success && response.groups) {
+    //                 rawGroups = response.groups;
+    //             } else if (Array.isArray(response)) {
+    //                 rawGroups = response;
+    //             } else if (response && response.groups) {
+    //                 rawGroups = response.groups;
+    //             } else {
+    //                 if (!environment.production) {
+    //                     console.warn('Estructura de respuesta inesperada:', response);
+    //                 }
+    //                 return [];
+    //             }
+
+    //             // Adaptar la forma del backend (group_id) a la interfaz Group (id)
+    //             return rawGroups.map(g => this.mapToGroup(g));
+    //         }),
+    //         catchError((error: HttpErrorResponse) => {
+    //             if (!environment.production) {
+    //                 console.error('Error al cargar grupos:', error);
+    //             }
+    //             return this.handleError(error);
+    //         })
+    //     );
+    // }
     getGroupsBySchool(schoolId: number): Observable<Group[]> {
-        const token = localStorage.getItem('auth_token');
-        const headers = { Authorization: `Bearer ${token}` };
         const url = `${GROUP_URLS.GROUPS_BY_SCHOOL}?school_id=${schoolId}`;
-
-        return this.http.get<any>(url, { headers }).pipe(
+        return this.http.get<any>(url).pipe(
             map(response => {
-
-                if (!environment.production) {
-                    console.log('Respuesta completa:', response);
-                }
-
-                let rawGroups: any[] = [];
-
                 if (response && response.success && response.groups) {
-                    rawGroups = response.groups;
-                } else if (Array.isArray(response)) {
-                    rawGroups = response;
-                } else if (response && response.groups) {
-                    rawGroups = response.groups;
-                } else {
-                    if (!environment.production) {
-                        console.warn('Estructura de respuesta inesperada:', response);
-                    }
-                    return [];
+                    return response.groups.map((g: any) => ({
+                        id: g.group_id,
+                        group: g.group
+                    }));
                 }
-
-                // Adaptar la forma del backend (group_id) a la interfaz Group (id)
-                return rawGroups.map(g => this.mapToGroup(g));
-            }),
-            catchError((error: HttpErrorResponse) => {
-                if (!environment.production) {
-                    console.error('Error al cargar grupos:', error);
-                }
-                return this.handleError(error);
+                return [];
             })
         );
     }

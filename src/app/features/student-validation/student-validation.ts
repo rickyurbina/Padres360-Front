@@ -70,14 +70,28 @@ export class StudentValidationComponent {
     this.loadGroups();
   }
 
+  // loadGroups(): void {
+  //   const schoolId = this.currentUser?.school_id || 0;
+  //   this.groupService.getGroupsBySchool(schoolId).subscribe({
+  //     next: (groups: Group[]) => {
+  //       this.groups = groups;
+  //       this.cdr.detectChanges();
+  //     },
+  //     error: (error: any) => {
+  //     }
+  //   });
+  // }
   loadGroups(): void {
-    const schoolId = this.currentUser?.school_id || 0;
+    const schoolId = 1; // Hardcoded temporalmente
+    console.log('🔍 Cargando grupos con schoolId:', schoolId);
     this.groupService.getGroupsBySchool(schoolId).subscribe({
       next: (groups: Group[]) => {
+        console.log('✅ Grupos cargados:', groups);
         this.groups = groups;
         this.cdr.detectChanges();
       },
-      error: (error: any) => {
+      error: (error) => {
+        console.error('❌ Error al cargar grupos:', error);
       }
     });
   }
