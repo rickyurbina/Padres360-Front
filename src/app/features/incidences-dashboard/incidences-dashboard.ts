@@ -100,7 +100,7 @@ export class IncidencesDashboardComponent implements OnInit {
       this.incidencesService.getIncidenceRecords(
         {
           schoolId: this.authService.getCurrentUser()?.school_id,
-          type: 'ESTUDIANTE',
+          type: 'DOCENTE',
           startDate: `${this.selectedYear}-${String(this.selectedMonth).padStart(2, '0')}-01`,
           endDate: `${this.selectedYear}-${String(this.selectedMonth).padStart(2, '0')}-${new Date(this.selectedYear, this.selectedMonth, 0).getDate()}`
         }
