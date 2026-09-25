@@ -6,6 +6,11 @@ import { Router } from '@angular/router';
 import { STUDENT_URLS } from '../constants/api-urls.constants';
 import { User } from '@models/user.model';
 import { Student, StudentResponse } from '@models/student.model';
+import { environment } from '../../../environments/environment';
+import {
+    StudentAdminEditPayload,
+    StudentAdminEditResponse
+} from '@models/student-admin-edit.model';
 
 @Injectable({
     providedIn: 'root'
@@ -75,12 +80,14 @@ export class StudentService {
         }
 
         // También puedes loguear el error para debugging
-        console.error('Login error:', {
-            status: error.status,
-            message: error.message,
-            url: error.url,
-            error: error.error
-        });
+        if (!environment.production) {
+            console.error('Login error:', {
+                status: error.status,
+                message: error.message,
+                url: error.url,
+                error: error.error
+            });
+        }
 
         return throwError(() => new Error(errorMessage));
     }
@@ -134,7 +141,9 @@ export class StudentService {
 
         return this.http.post<StudentResponse>(STUDENT_URLS.CREATE, data, { headers }).pipe(
             map(response => {
-                console.log(response);
+                if (!environment.production) {
+                    console.log(response);
+                }
                 return this.handleCreateResponse(response);
             }),
             catchError((error: HttpErrorResponse) => {
@@ -194,7 +203,9 @@ export class StudentService {
         }
 
         // Puedes mostrar el error en un toast, snackbar, o console
-        console.error('Error en createStudent:', errorMessage);
+        if (!environment.production) {
+            console.error('Error en createStudent:', errorMessage);
+        }
 
         // Retornar el error como un observable
         return throwError(() => new Error(errorMessage));
@@ -294,11 +305,44 @@ export class StudentService {
 
         return this.http.put<StudentResponse>(STUDENT_URLS.UPDATE(student.id), data, { headers }).pipe(
             map(response => {
-                console.log(response);
+                if (!environment.production) {
+                    console.log(response);
+                }
                 return this.handleCreateResponse(response);
             }),
             catchError((error: HttpErrorResponse) => {
                 return this.handleCreateError(error);
+            })
+        );
+    }
+    getStudentForEdit(studentId: number): Observable<StudentAdminEditResponse> {
+        const token = localStorage.getItem('auth_token');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        return this.http.get<StudentAdminEditResponse>(
+            STUDENT_URLS.EDIT(studentId),
+            { headers }
+        ).pipe(
+            catchError((error: HttpErrorResponse) => {
+                return this.handleError(error);
+            })
+        );
+    }
+
+    updateStudentForEdit(
+        studentId: number,
+        data: StudentAdminEditPayload
+    ): Observable<StudentAdminEditResponse> {
+        const token = localStorage.getItem('auth_token');
+        const headers = { Authorization: `Bearer ${token}` };
+
+        return this.http.put<StudentAdminEditResponse>(
+            STUDENT_URLS.EDIT(studentId),
+            data,
+            { headers }
+        ).pipe(
+            catchError((error: HttpErrorResponse) => {
+                return this.handleError(error);
             })
         );
     }

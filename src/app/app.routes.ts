@@ -99,6 +99,12 @@ export const routes: Routes = [
                 loadComponent: () => import('./features/incidences-dashboard-student/incidences-dashboard-student').then(m => m.IncidencesDashboardStudentComponent)
             },
             {
+                path: 'students/:id/edit',
+                title: 'Editar estudiante',
+                loadComponent: () => import('./features/students/student-edit/student-edit')
+                    .then(m => m.StudentEditComponent)
+            },
+            {
                 path: 'students',
                 title: 'Estudiantes',
                 loadComponent: () => import('./features/students/students').then(m => m.StudentsComponent)

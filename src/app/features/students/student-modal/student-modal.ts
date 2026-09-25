@@ -7,6 +7,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { StudentService } from '@services/students.service';
 import { ConfirmationModalService } from '@services/confirmation-modal.service';
 import { GroupService } from '@services/groups.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-new-student-modal',
@@ -77,7 +78,9 @@ export class StudentModalComponent {
     ) { }
 
     ngOnInit() {
-        console.log('🔵 StudentModalComponent ngOnInit - Modo:', this.isEditMode ? 'Edición' : 'Nuevo');
+        if (!environment.production) {
+            console.log('🔵 StudentModalComponent ngOnInit - Modo:', this.isEditMode ? 'Edición' : 'Nuevo');
+        }
         this.groupService.getGroupFilters().subscribe(filters => {
             this.groups = filters.gruposFull;
             this.cdr.detectChanges();
@@ -90,7 +93,9 @@ export class StudentModalComponent {
     }
 
     private loadStudentData(): void {
-        console.log('📥 Cargando datos del estudiante:', this.studentData);
+        if (!environment.production) {
+            console.log('📥 Cargando datos del estudiante:', this.studentData);
+        }
 
         // Mapear los datos del estudiante al formulario
         this.formStudent = {
@@ -114,7 +119,9 @@ export class StudentModalComponent {
             }
         };
 
-        console.log('📥 Formulario cargado:', this.formStudent);
+        if (!environment.production) {
+            console.log('📥 Formulario cargado:', this.formStudent);
+        }
     }
 
     save() {
@@ -451,7 +458,9 @@ export class StudentModalComponent {
     agregarEstudiante(): void {
         this.studentService.createStudent(this.formStudent).subscribe({
             next: data => {
-                console.log(data);
+                if (!environment.production) {
+                    console.log(data);
+                }
                 this.isLoading = false;
                 this.confirmationModal.showSuccess('Estudiante creado exitosamente').subscribe();
                 this.close({ success: true, event: 'create' });
@@ -474,7 +483,9 @@ export class StudentModalComponent {
     actualizarEstudiante(): void {
         this.studentService.updateStudent(this.formStudent).subscribe({
             next: data => {
-                console.log(data);
+                if (!environment.production) {
+                    console.log(data);
+                }
                 this.isLoading = false;
                 this.confirmationModal.showSuccess('Estudiante modificado exitosamente').subscribe;
                 this.close({ success: true, event: 'update' });

@@ -17,6 +17,8 @@ import { Functionality } from '@enums/functionality.enum';
 import { AccessControlService } from '@services/access-control.service';
 //import { ReportExportService } from '@services/report-export.service';
 import { StudentsListReportComponent } from './reports/list/student-list-pdf';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 interface Filters {
   grado: string;
@@ -89,7 +91,7 @@ export class StudentsComponent implements OnInit {
     private modalConfirmation: ConfirmationModalService,
     private accessControlService: AccessControlService,
     //private reportExport: ReportExportService,
-    // private router: Router
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -107,7 +109,9 @@ export class StudentsComponent implements OnInit {
         next: data => {
           this.students = data;
           this.applyFilters();
-          console.log(data);
+          if (!environment.production) {
+            console.log(data);
+          }
           this.isLoading = false;
           this.isEmpty = this.students.length == 0;
           this.cdr.detectChanges();
@@ -300,11 +304,15 @@ export class StudentsComponent implements OnInit {
       showClose: true
     }).subscribe((result) => {
       if (result) {
-        console.log('El modal se cerró con datos:', result);
+        if (!environment.production) {
+          console.log('El modal se cerró con datos:', result);
+        }
         this.filters = result;
         this.applyFilters();
       } else {
-        console.log('El modal se cerró sin cambios');
+        if (!environment.production) {
+          console.log('El modal se cerró sin cambios');
+        }
       }
     });
   }
@@ -329,41 +337,57 @@ export class StudentsComponent implements OnInit {
       showClose: true
     }).subscribe((result) => {
       if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
+        if (!environment.production) {
+          console.log('El modal se cerró con datos:', result);
+        }
         this.loadStudents();
       } else {
-        console.log('El modal se cerró sin cambios');
+        if (!environment.production) {
+          console.log('El modal se cerró sin cambios');
+        }
       }
     });
   }
 
   // ===================== ACCIONES DE ESTUDIANTES =====================
-  editarIncidencia(student: Student): void {
-    this.modalService.openModal(StudentModalComponent, {
-      title: 'Editar Estudiante',
-      size: 'md',
-      data: { isEditMode: true, studentData: student },
-      showClose: true
-    }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-        this.loadStudents();
-      } else {
-        console.log('El modal se cerró sin cambios');
+  // editarIncidencia(student: Student): void {
+  //   this.modalService.openModal(StudentModalComponent, {
+  //     title: 'Editar Estudiante',
+  //     size: 'md',
+  //     data: { isEditMode: true, studentData: student },
+  //     showClose: true
+  //   }).subscribe((result) => {
+  //     if (result?.success) {
+  //       console.log('El modal se cerró con datos:', result);
+  //       this.loadStudents();
+  //     } else {
+  //       console.log('El modal se cerró sin cambios');
+  //     }
+  //   });
+  // }
+    editarIncidencia(student: Student): void {
+      if (!student.id) {
+        return;
       }
-    });
-  }
+
+      this.router.navigate([
+        '/dashboard/students',
+        student.id,
+        'edit'
+      ]);
+    }
+
 
   eliminarIncidencia(incidence: Student): void {
     this.modalConfirmation.confirm('¿Deseas continuar con esta acción?')
       .subscribe(result => {
-        if (result === 'yes') {
-          console.log('Usuario confirmó');
-        } else if (result === 'no') {
-          console.log('Usuario rechazó');
-        } else {
-          console.log('Usuario cerró el modal');
-        }
+        // if (result === 'yes') {
+        //   console.log('Usuario confirmó');
+        // } else if (result === 'no') {
+        //   console.log('Usuario rechazó');
+        // } else {
+        //   console.log('Usuario cerró el modal');
+        // }
       });
   }
 
@@ -374,11 +398,11 @@ export class StudentsComponent implements OnInit {
       data: { type: 'student', selected: incidence },
       showClose: true
     }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
+      // if (result?.success) {
+      //   console.log('El modal se cerró con datos:', result);
+      // } else {
+      //   console.log('El modal se cerró sin cambios');
+      // }
     });
   }
 
@@ -389,11 +413,11 @@ export class StudentsComponent implements OnInit {
       data: { isStudent: true, selected: incidence },
       showClose: true
     }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
+      // if (result?.success) {
+      //   console.log('El modal se cerró con datos:', result);
+      // } else {
+      //   console.log('El modal se cerró sin cambios');
+      // }
     });
   }
 
@@ -404,16 +428,16 @@ export class StudentsComponent implements OnInit {
       data: { isStudent: true, selected: [student] },
       showClose: true
     }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
+      // if (result?.success) {
+      //   console.log('El modal se cerró con datos:', result);
+      // } else {
+      //   console.log('El modal se cerró sin cambios');
+      // }
     });
   }
 
   mensajePadres(incidence: Student): void {
-    console.log('Mensaje a padres:', incidence);
+    // console.log('Mensaje a padres:', incidence);
     alert(`Enviar mensaje a padres de: ${incidence.firstName} ${incidence.firstSurname}`);
     // Aquí puedes abrir un modal para enviar mensaje
     // this.router.navigate(['/mensajes/nuevo', incidence.id]);
@@ -467,11 +491,11 @@ export class StudentsComponent implements OnInit {
       showClose: true
     }).subscribe((result) => {
       this.selectedItems.clear();
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
+      // if (result?.success) {
+      //   console.log('El modal se cerró con datos:', result);
+      // } else {
+      //   console.log('El modal se cerró sin cambios');
+      // }
     });
   }
 
