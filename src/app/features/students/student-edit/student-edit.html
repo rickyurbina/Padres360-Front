@@ -161,6 +161,13 @@
           <h2>Datos de tutores</h2>
           <p>Todos los tutores relacionados con el alumno.</p>
         </div>
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="addParent()">
+          + Agregar tutor
+        </button>
       </div>
 
       <div *ngIf="parents.length === 0" class="alert alert-error">
@@ -185,10 +192,18 @@
         class="parent-panel"
         [hidden]="selectedParentIndex !== index">
 
-        <h3>
-          Tutor {{ index + 1 }}:
-          {{ parent.first_name }} {{ parent.last_name }}
-        </h3>
+          <h3>
+            Tutor {{ index + 1 }}:
+            {{ parent.first_name }} {{ parent.last_name }}
+          </h3>
+
+          <button
+            *ngIf="isNewParent(parent)"
+            type="button"
+            class="secondary-button"
+            (click)="removeNewParent(index)">
+            Quitar tutor
+          </button>
 
         <div class="form-grid">
           <div class="form-field">
@@ -267,10 +282,13 @@
             </small>
           </div>
 
-          <div class="form-field full-width">
+          <div
+            *ngIf="parent.id"
+            class="form-field full-width">
             <label [for]="'parentPassword' + index">
               Nueva contraseña
             </label>
+
             <input
               [id]="'parentPassword' + index"
               type="password"
@@ -285,9 +303,22 @@
             </small>
 
             <small
-              *ngIf="parentPassword.invalid && parentPassword.touched"
+              *ngIf="
+                parentPassword.invalid &&
+                parentPassword.touched
+              "
               class="field-error">
               La contraseña debe contener al menos 6 caracteres.
+            </small>
+          </div>
+
+          <div
+            *ngIf="!parent.id"
+            class="form-field full-width">
+            <small class="field-help">
+              Si el tutor es nuevo, su contraseña inicial será la
+              CURP del alumno. Si ya existe, conservará su
+              contraseña actual.
             </small>
           </div>
         </div>

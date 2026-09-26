@@ -88,12 +88,50 @@ export class StudentEditComponent implements OnInit {
     this.successMessage = '';
   }
 
+  addParent(): void {
+    this.parents.push({
+      first_name: '',
+      last_name: '',
+      email: '',
+      cell_phone: '',
+      password: ''
+    });
+
+    this.selectedParentIndex = this.parents.length - 1;
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.cdr.detectChanges();
+  }
+
+  isNewParent(parent: ParentAdminEditData): boolean {
+    return !parent.id;
+  }
+
+  removeNewParent(index: number): void {
+    const parent = this.parents[index];
+
+    if (!parent || parent.id) {
+      return;
+    }
+
+    this.parents.splice(index, 1);
+
+    if (this.selectedParentIndex >= this.parents.length) {
+      this.selectedParentIndex =
+        Math.max(0, this.parents.length - 1);
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.cdr.detectChanges();
+  }
+
   save(form: NgForm): void {
     if (!this.student || this.isSaving) {
       return;
     }
 
-    if (form.invalid) {
+    if (form.invalid || this.parents.length === 0) {
       form.control.markAllAsTouched();
       this.errorMessage =
         'Verifica los campos obligatorios.';
@@ -116,11 +154,6 @@ export class StudentEditComponent implements OnInit {
         const message =
           response.message ||
           'Información actualizada correctamente.';
-
-        this.parents = this.parents.map(parent => ({
-          ...parent,
-          password: ''
-        }));
 
         this.cdr.detectChanges();
 
@@ -188,7 +221,6 @@ export class StudentEditComponent implements OnInit {
       next: groups => {
         this.groups = groups;
         this.isLoading = false;
-
         this.cdr.detectChanges();
       },
       error: error => {
@@ -208,16 +240,19 @@ export class StudentEditComponent implements OnInit {
     const parents = this.parents.map(parent => {
       const parentData:
         StudentAdminEditPayload['parents'][number] = {
-          id: parent.id,
           first_name: parent.first_name.trim(),
           last_name: parent.last_name.trim(),
-          email: parent.email.trim(),
+          email: parent.email.trim().toLowerCase(),
           cell_phone: parent.cell_phone.trim()
         };
 
+      if (parent.id) {
+        parentData.id = parent.id;
+      }
+
       const password = parent.password?.trim();
 
-      if (password) {
+      if (parent.id && password) {
         parentData.password = password;
       }
 

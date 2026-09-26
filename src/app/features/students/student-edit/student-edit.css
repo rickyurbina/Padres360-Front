@@ -291,3 +291,22 @@
     width: 100%;
   }
 }
+
+.parent-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.parent-panel-header h3 {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .parent-panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
