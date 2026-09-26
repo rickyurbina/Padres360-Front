@@ -39,6 +39,7 @@ export const PARENT_URLS = {
 // Students API
 export const STUDENT_URLS = {
   CREATE: `${API_BASE.V1}/api/students/create/`,
+  ADMIN_CREATE: `${API_BASE.V1}/api/students/admin-create/`,
   UPDATE: (studentId: number) => `${API_BASE.V1}/api/students/${studentId}/update/`,
   EDIT: (studentId: number) => `${API_BASE.V1}/api/students/${studentId}/edit/`,
   STUDENT_LIST: `${API_BASE.V1}/api/students/list`,

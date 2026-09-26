@@ -330,24 +330,28 @@ export class StudentsComponent implements OnInit {
     };
   }
 
-  abrirModalAgregar(): void {
-    this.modalService.openModal(StudentModalComponent, {
-      title: 'Nuevo Estudiante',
-      size: 'md',
-      showClose: true
-    }).subscribe((result) => {
-      if (result?.success) {
-        if (!environment.production) {
-          console.log('El modal se cerró con datos:', result);
-        }
-        this.loadStudents();
-      } else {
-        if (!environment.production) {
-          console.log('El modal se cerró sin cambios');
-        }
-      }
-    });
-  }
+  // abrirModalAgregar(): void {
+  //   this.modalService.openModal(StudentModalComponent, {
+  //     title: 'Nuevo Estudiante',
+  //     size: 'md',
+  //     showClose: true
+  //   }).subscribe((result) => {
+  //     if (result?.success) {
+  //       if (!environment.production) {
+  //         console.log('El modal se cerró con datos:', result);
+  //       }
+  //       this.loadStudents();
+  //     } else {
+  //       if (!environment.production) {
+  //         console.log('El modal se cerró sin cambios');
+  //       }
+  //     }
+  //   });
+  // }
+abrirModalAgregar(): void {
+  this.router.navigate(['/dashboard/students/new']);
+}
+
 
   // ===================== ACCIONES DE ESTUDIANTES =====================
   // editarIncidencia(student: Student): void {

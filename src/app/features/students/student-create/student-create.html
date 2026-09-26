@@ -1,0 +1,357 @@
+<div class="student-create-page">
+  <div class="page-header">
+    <div>
+      <h1>Registrar alumno</h1>
+      <p>Captura los datos del alumno y sus tutores.</p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="cancel()"
+    >
+      Volver
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="status-card">
+    Cargando información...
+  </div>
+
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="alert alert-error"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <form
+    *ngIf="!isLoading"
+    #studentForm="ngForm"
+    (ngSubmit)="save(studentForm)"
+    novalidate
+  >
+    <section class="form-card">
+      <div class="section-header">
+        <div>
+          <h2>Datos del alumno</h2>
+          <p>Los campos marcados con * son obligatorios.</p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="firstName">Nombre *</label>
+          <input
+            id="firstName"
+            name="firstName"
+            type="text"
+            [(ngModel)]="student.first_name"
+            #firstName="ngModel"
+            maxlength="250"
+            required
+          >
+
+          <small
+            *ngIf="firstName.invalid && firstName.touched"
+            class="field-error"
+          >
+            El nombre es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="firstSurname">
+            Apellido paterno *
+          </label>
+          <input
+            id="firstSurname"
+            name="firstSurname"
+            type="text"
+            [(ngModel)]="student.first_surname"
+            #firstSurname="ngModel"
+            maxlength="250"
+            required
+          >
+
+          <small
+            *ngIf="
+              firstSurname.invalid &&
+              firstSurname.touched
+            "
+            class="field-error"
+          >
+            El apellido paterno es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="secondSurname">
+            Apellido materno
+          </label>
+          <input
+            id="secondSurname"
+            name="secondSurname"
+            type="text"
+            [(ngModel)]="student.second_surname"
+            maxlength="250"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="controlNumber">
+            Número de control
+          </label>
+          <input
+            id="controlNumber"
+            name="controlNumber"
+            type="text"
+            [(ngModel)]="student.control_number"
+            maxlength="100"
+          >
+        </div>
+
+        <div class="form-field">
+          <label for="curp">CURP *</label>
+          <input
+            id="curp"
+            name="curp"
+            type="text"
+            [(ngModel)]="student.curp"
+            #curp="ngModel"
+            minlength="18"
+            maxlength="18"
+            required
+            class="uppercase"
+          >
+
+          <small
+            *ngIf="curp.invalid && curp.touched"
+            class="field-error"
+          >
+            La CURP debe contener 18 caracteres.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="groupId">Grupo *</label>
+          <select
+            id="groupId"
+            name="groupId"
+            [(ngModel)]="student.group_id"
+            #groupId="ngModel"
+            required
+          >
+            <option [ngValue]="0">
+              Selecciona un grupo
+            </option>
+
+            <option
+              *ngFor="let group of groups"
+              [ngValue]="group.id"
+            >
+              {{ group.group }}
+            </option>
+          </select>
+
+          <small
+            *ngIf="
+              (groupId.touched || studentForm.submitted) &&
+              student.group_id <= 0
+            "
+            class="field-error"
+          >
+            Selecciona un grupo.
+          </small>
+        </div>
+
+        <div class="form-field checkbox-field">
+          <label>
+            <input
+              name="active"
+              type="checkbox"
+              [(ngModel)]="student.active"
+            >
+            Alumno activo
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-header tutor-header">
+        <div>
+          <h2>Datos de tutores</h2>
+          <p>
+            Debe registrarse por lo menos un tutor.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-add"
+          (click)="addParent()"
+        >
+          + Agregar tutor
+        </button>
+      </div>
+
+      <div
+        *ngFor="
+          let parent of parents;
+          let index = index;
+          trackBy: trackByIndex
+        "
+        class="tutor-card"
+      >
+        <div class="tutor-title">
+          <h3>Tutor {{ index + 1 }}</h3>
+
+          <button
+            *ngIf="parents.length > 1"
+            type="button"
+            class="btn-remove"
+            (click)="removeParent(index)"
+          >
+            Eliminar
+          </button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label [for]="'parentFirstName' + index">
+              Nombre *
+            </label>
+            <input
+              [id]="'parentFirstName' + index"
+              [name]="'parentFirstName' + index"
+              type="text"
+              [(ngModel)]="parent.first_name"
+              #parentFirstName="ngModel"
+              maxlength="150"
+              required
+            >
+
+            <small
+              *ngIf="
+                parentFirstName.invalid &&
+                parentFirstName.touched
+              "
+              class="field-error"
+            >
+              El nombre es obligatorio.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label [for]="'parentLastName' + index">
+              Apellidos *
+            </label>
+            <input
+              [id]="'parentLastName' + index"
+              [name]="'parentLastName' + index"
+              type="text"
+              [(ngModel)]="parent.last_name"
+              #parentLastName="ngModel"
+              maxlength="150"
+              required
+            >
+
+            <small
+              *ngIf="
+                parentLastName.invalid &&
+                parentLastName.touched
+              "
+              class="field-error"
+            >
+              Los apellidos son obligatorios.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label [for]="'parentEmail' + index">
+              Correo electrónico *
+            </label>
+            <input
+              [id]="'parentEmail' + index"
+              [name]="'parentEmail' + index"
+              type="email"
+              [(ngModel)]="parent.email"
+              #parentEmail="ngModel"
+              maxlength="254"
+              required
+              email
+            >
+
+            <small
+              *ngIf="
+                parentEmail.invalid &&
+                parentEmail.touched
+              "
+              class="field-error"
+            >
+              Ingresa un correo electrónico válido.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label [for]="'parentPhone' + index">
+              Teléfono *
+            </label>
+            <input
+              [id]="'parentPhone' + index"
+              [name]="'parentPhone' + index"
+              type="tel"
+              inputmode="numeric"
+              [(ngModel)]="parent.cell_phone"
+              #parentPhone="ngModel"
+              minlength="10"
+              maxlength="10"
+              pattern="[0-9]{10}"
+              required
+            >
+
+            <small
+              *ngIf="
+                parentPhone.invalid &&
+                parentPhone.touched
+              "
+              class="field-error"
+            >
+              El teléfono debe contener 10 dígitos.
+            </small>
+          </div>
+        </div>
+
+        <p class="password-note">
+          Si el tutor es nuevo, su contraseña inicial será
+          la CURP del alumno. Si ya existe, conservará su
+          contraseña actual.
+        </p>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        [disabled]="isSaving"
+        (click)="cancel()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="isSaving"
+      >
+        {{
+          isSaving
+            ? 'Registrando...'
+            : 'Registrar alumno'
+        }}
+      </button>
+    </div>
+  </form>
+</div>

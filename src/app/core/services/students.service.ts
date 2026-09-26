@@ -12,6 +12,11 @@ import {
     StudentAdminEditResponse
 } from '@models/student-admin-edit.model';
 
+import {
+  StudentAdminCreatePayload,
+  StudentAdminCreateResponse
+} from '@models/student-admin-create.model';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -345,5 +350,72 @@ export class StudentService {
                 return this.handleError(error);
             })
         );
+    }
+    createStudentForAdmin(
+        payload: StudentAdminCreatePayload
+    ): Observable<StudentAdminCreateResponse> {
+        const token = localStorage.getItem('auth_token');
+
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+
+        return this.http.post<StudentAdminCreateResponse>(
+            STUDENT_URLS.ADMIN_CREATE,
+            payload,
+            { headers }
+        ).pipe(
+            catchError((error: HttpErrorResponse) => {
+            const detailMessage =
+                this.extractValidationMessage(
+                error.error?.details
+                );
+
+            const errorMessage =
+                detailMessage ||
+                error.error?.message ||
+                'No fue posible registrar al alumno.';
+
+            return throwError(
+                () => new Error(errorMessage)
+            );
+            })
+        );
+    }
+    private extractValidationMessage(
+        value: unknown
+    ): string | null {
+        if (typeof value === 'string') {
+            return value;
+        }
+
+        if (Array.isArray(value)) {
+            for (const item of value) {
+            const message =
+                this.extractValidationMessage(item);
+
+            if (message) {
+                return message;
+            }
+            }
+
+            return null;
+        }
+
+        if (
+            value !== null &&
+            typeof value === 'object'
+        ) {
+            for (const item of Object.values(value)) {
+            const message =
+                this.extractValidationMessage(item);
+
+            if (message) {
+                return message;
+            }
+            }
+        }
+
+        return null;
     }
 }
