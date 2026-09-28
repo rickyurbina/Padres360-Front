@@ -7,5 +7,6 @@ export enum UserRole {
   Enfermeria = 'NURSING',
   Docentes = 'TEACHER',
   Papas = 'PARENT',
+  SoporteTI = 'TI',
   None = 'None' 
 }

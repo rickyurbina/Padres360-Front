@@ -140,7 +140,28 @@ export const routes: Routes = [
                 path: 'my-children',
                 title: 'Mis hijos',
                 loadComponent: () => import('./features/my-children/my-children').then(m => m.MyChildrenComponent)
-            }
+            },
+            {
+                path: 'users/new',
+                title: 'Registrar usuario',
+                loadComponent: () =>
+                    import('./features/users/user-form/user-form')
+                        .then(m => m.UserForm)
+            },
+            {
+                path: 'users/:id/edit',
+                title: 'Editar usuario',
+                loadComponent: () =>
+                    import('./features/users/user-form/user-form')
+                        .then(m => m.UserForm)
+            },
+            {
+                path: 'users',
+                title: 'Usuarios',
+                loadComponent: () =>
+                    import('./features/users/users-list/users-list')
+                        .then(m => m.UsersList)
+            },
         ]
     },
     {

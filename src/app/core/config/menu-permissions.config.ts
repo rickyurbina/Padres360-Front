@@ -87,3 +87,7 @@ export const parentsMenu = [
     Functionality.EditarPapa,
     Functionality.EliminarPapa
 ];
+
+export const usersMenu = [
+    Functionality.ManageUsers
+];

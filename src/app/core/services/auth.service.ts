@@ -259,6 +259,7 @@ export class AuthService {
             case UserRole.Docentes: return 'Docente';
             case UserRole.Papas: return 'Padre/Tutor';
             case UserRole.None: return '';
+            case UserRole.SoporteTI: return 'Soporte TI';
             default: return '';
         }
     }

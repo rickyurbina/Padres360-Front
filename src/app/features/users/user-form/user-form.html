@@ -1,0 +1,287 @@
+<div class="user-form-page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="back-button"
+      (click)="cancel()">
+      ← Regresar
+    </button>
+
+    <div>
+      <h1>
+        {{
+          isEditMode
+            ? 'Editar usuario'
+            : 'Registrar usuario'
+        }}
+      </h1>
+
+      <p>
+        {{
+          isEditMode
+            ? 'Actualiza los datos, rol o contraseña.'
+            : 'Registra un usuario interno del sistema.'
+        }}
+      </p>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="status-card">
+    Cargando información...
+  </div>
+
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <form
+    *ngIf="!isLoading"
+    #userForm="ngForm"
+    (ngSubmit)="save(userForm)"
+    novalidate>
+
+    <section class="form-card">
+      <div class="section-header">
+        <div>
+          <h2>Datos del usuario</h2>
+          <p>
+            Los campos marcados con * son obligatorios.
+          </p>
+        </div>
+
+        <label class="active-control">
+          <input
+            type="checkbox"
+            name="isActive"
+            [(ngModel)]="formUser.is_active">
+          Usuario activo
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="firstName">Nombre(s) *</label>
+          <input
+            id="firstName"
+            type="text"
+            name="firstName"
+            [(ngModel)]="formUser.first_name"
+            #firstName="ngModel"
+            maxlength="150"
+            required>
+
+          <small
+            *ngIf="firstName.invalid && firstName.touched"
+            class="field-error">
+            El nombre es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="lastName">Apellidos *</label>
+          <input
+            id="lastName"
+            type="text"
+            name="lastName"
+            [(ngModel)]="formUser.last_name"
+            #lastName="ngModel"
+            maxlength="150"
+            required>
+
+          <small
+            *ngIf="lastName.invalid && lastName.touched"
+            class="field-error">
+            Los apellidos son obligatorios.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="username">Nombre de usuario *</label>
+          <input
+            id="username"
+            type="text"
+            name="username"
+            [(ngModel)]="formUser.username"
+            #username="ngModel"
+            maxlength="150"
+            required>
+
+          <small
+            *ngIf="username.invalid && username.touched"
+            class="field-error">
+            El nombre de usuario es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="email">Correo electrónico *</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="formUser.email"
+            #email="ngModel"
+            maxlength="254"
+            required
+            email>
+
+          <small
+            *ngIf="email.invalid && email.touched"
+            class="field-error">
+            Ingresa un correo electrónico válido.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="role">Rol *</label>
+          <select
+            id="role"
+            name="role"
+            [(ngModel)]="formUser.role"
+            #role="ngModel"
+            required>
+            <option value="">Selecciona un rol</option>
+
+            <option
+              *ngFor="let roleOption of roles"
+              [value]="roleOption.value">
+              {{ roleOption.label }}
+            </option>
+          </select>
+
+          <small
+            *ngIf="role.invalid && role.touched"
+            class="field-error">
+            Selecciona un rol.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="school">Escuela *</label>
+          <select
+            id="school"
+            name="school"
+            [(ngModel)]="formUser.school_id"
+            #school="ngModel"
+            required>
+            <option [ngValue]="0">
+              Selecciona una escuela
+            </option>
+
+            <option
+              *ngFor="let schoolOption of schools"
+              [ngValue]="schoolOption.id">
+              {{ schoolOption.name }}
+            </option>
+          </select>
+
+          <small
+            *ngIf="
+              school.touched &&
+              formUser.school_id <= 0
+            "
+            class="field-error">
+            Selecciona una escuela.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-header">
+        <div>
+          <h2>
+            {{
+              isEditMode
+                ? 'Restablecer contraseña'
+                : 'Contraseña inicial'
+            }}
+          </h2>
+
+          <p *ngIf="isEditMode">
+            Déjala vacía para conservar la contraseña actual.
+          </p>
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="password">
+            Contraseña
+            {{ isEditMode ? '' : '*' }}
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="formUser.password"
+            #password="ngModel"
+            minlength="8"
+            [required]="!isEditMode"
+            autocomplete="new-password">
+
+          <small
+            *ngIf="password.invalid && password.touched"
+            class="field-error">
+            La contraseña debe contener al menos
+            8 caracteres.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="confirmPassword">
+            Confirmar contraseña
+            {{ isEditMode ? '' : '*' }}
+          </label>
+
+          <input
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            #passwordConfirmation="ngModel"
+            minlength="8"
+            [required]="!isEditMode"
+            autocomplete="new-password">
+
+          <small
+            *ngIf="
+              passwordConfirmation.touched &&
+              formUser.password !== confirmPassword
+            "
+            class="field-error">
+            Las contraseñas no coinciden.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="isSaving"
+        (click)="cancel()">
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="isSaving">
+        {{
+          isSaving
+            ? 'Guardando...'
+            : (
+                isEditMode
+                  ? 'Guardar cambios'
+                  : 'Registrar usuario'
+              )
+        }}
+      </button>
+    </div>
+  </form>
+</div>

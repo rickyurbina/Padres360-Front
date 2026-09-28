@@ -8,11 +8,13 @@ import { toUserRole } from '../helpers/role.helpers';
 @Injectable({
     providedIn: 'root'
 })
+
+
 export class AccessControlService {
 
     constructor(private authService: AuthService) { }
 
-    private permissions: Record<Functionality, Record<UserRole, number>> = {
+    private permissions: Record<Functionality,Partial<Record<UserRole, number>>> = {
         [Functionality.DashboardDocentes]:              { PRINCIPAL: 1, TEACHING_SERVICES: 1, SCHOOL_SERVICES: 0, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.DashboardAlumnos]:               { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         //Mensajeria
@@ -55,6 +57,7 @@ export class AccessControlService {
         [Functionality.Mensajes]:                       { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 0, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.EditarPapa]:                     { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.EliminarPapa]:                   { PRINCIPAL: 0, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 0, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
+        [Functionality.ManageUsers]:                    {PRINCIPAL: 1,  TEACHING_SERVICES: 1, TI: 1},
     
     };
 

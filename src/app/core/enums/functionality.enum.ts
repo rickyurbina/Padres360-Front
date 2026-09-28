@@ -45,4 +45,6 @@ export enum Functionality {
   Mensajes = 'Enviar Mensaje',
   EditarPapa = 'Editar Papa',
   EliminarPapa = 'Eliminar Papa',
+
+  ManageUsers = 'Administrar Usuarios',
 }

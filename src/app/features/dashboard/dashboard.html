@@ -95,6 +95,20 @@
         routerLink="/dashboard/parents" class="menu-item"> <img src="/ico/parents.svg" alt="Padres" class="icon" /> <span
           class="label" *ngIf="!isSidebarCollapsed()">Padres</span>
       </a>
+      <a
+        *ngIf="hasAnyAccess(usersMenu)"
+        routerLink="/dashboard/users"
+        class="menu-item">
+        <img
+          src="/ico/settings.svg"
+          alt="Usuarios"
+          class="icon">
+        <span
+          class="label"
+          *ngIf="!isSidebarCollapsed()">
+          Usuarios
+        </span>
+      </a>
     </nav>
     <!-- Footer -->
     <div class="sidebar-footer">

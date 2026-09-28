@@ -1,0 +1,158 @@
+<div class="users-page">
+  <header class="page-header">
+    <div>
+      <h1>Usuarios</h1>
+      <p>
+        Administración de usuarios internos del sistema.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="primary-button"
+      (click)="createUser()">
+      + Nuevo usuario
+    </button>
+  </header>
+
+  <div *ngIf="isLoading" class="status-card">
+    Cargando usuarios...
+  </div>
+
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <ng-container *ngIf="!isLoading && !errorMessage">
+    <section class="filters-card">
+      <div class="filters-grid">
+        <div class="form-field">
+          <label for="searchTerm">Buscar</label>
+          <input
+            id="searchTerm"
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="applyFilters()"
+            placeholder="Nombre, correo o usuario">
+        </div>
+
+        <div class="form-field">
+          <label for="roleFilter">Rol</label>
+          <select
+            id="roleFilter"
+            [(ngModel)]="selectedRole"
+            (ngModelChange)="applyFilters()">
+            <option value="">Todos los roles</option>
+
+            <option
+              *ngFor="let role of roles"
+              [value]="role.value">
+              {{ role.label }}
+            </option>
+          </select>
+        </div>
+
+        <div
+          *ngIf="schools.length > 1"
+          class="form-field">
+          <label for="schoolFilter">Escuela</label>
+          <select
+            id="schoolFilter"
+            [(ngModel)]="selectedSchoolId"
+            (ngModelChange)="applyFilters()">
+            <option [ngValue]="0">
+              Todas las escuelas
+            </option>
+
+            <option
+              *ngFor="let school of schools"
+              [ngValue]="school.id">
+              {{ school.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="statusFilter">Estado</label>
+          <select
+            id="statusFilter"
+            [(ngModel)]="selectedStatus"
+            (ngModelChange)="applyFilters()">
+            <option value="">Todos</option>
+            <option value="active">Activos</option>
+            <option value="inactive">Inactivos</option>
+          </select>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="secondary-button"
+        (click)="clearFilters()">
+        Limpiar filtros
+      </button>
+    </section>
+
+    <section class="table-card">
+      <div class="table-summary">
+        {{ filteredUsers.length }} usuario(s)
+      </div>
+
+      <div
+        *ngIf="filteredUsers.length === 0"
+        class="empty-state">
+        No se encontraron usuarios.
+      </div>
+
+      <div
+        *ngIf="filteredUsers.length > 0"
+        class="table-container">
+        <table>
+            <thead>
+                <tr>
+                <th>Nombre</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let user of filteredUsers">
+                <td>
+                    {{ user.first_name }}
+                    {{ user.last_name }}
+                </td>
+
+                <td>{{ user.role_label }}</td>
+
+                <td>
+                    <span
+                    class="status-badge"
+                    [class.active]="user.is_active"
+                    [class.inactive]="!user.is_active">
+                    {{
+                        user.is_active
+                        ? 'Activo'
+                        : 'Inactivo'
+                    }}
+                    </span>
+                </td>
+
+                <td>
+                    <button
+                    type="button"
+                    class="edit-button"
+                    (click)="editUser(user)">
+                    Editar
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </section>
+  </ng-container>
+</div>

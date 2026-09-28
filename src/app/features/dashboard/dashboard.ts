@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '@services/auth.service';
 import { AccessControlService } from '@services/access-control.service';
 import { Functionality } from '@enums/functionality.enum';
-import { teacherMenu, adminTeacher, dashTeacher, messageMenu, studentMenu, dashStudent, adminStudent, myChildrenMenu, groupMenu, parentsMenu } from '@config/menu-permissions.config';
+import { usersMenu, teacherMenu, adminTeacher, dashTeacher, messageMenu, studentMenu, dashStudent, adminStudent, myChildrenMenu, groupMenu, parentsMenu } from '@config/menu-permissions.config';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,6 +29,7 @@ export class DashboardComponent {
   public myChildrenMenu=myChildrenMenu;
   public groupMenu = groupMenu;
   public parentsMenu = parentsMenu;
+  public usersMenu = usersMenu;
 
   constructor(private authService: AuthService,
     private router: Router,
