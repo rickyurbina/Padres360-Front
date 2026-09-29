@@ -6,6 +6,7 @@ interface TeacherJson {
     full_name: string;
     phone: string;
     email: string;
+    active: boolean;
 }
 
 export class Teacher {
@@ -16,10 +17,17 @@ export class Teacher {
     readonly fullName: string;
     readonly phone: string;
     readonly email: string;
+    readonly active: boolean;
     selected?: boolean;
 
     get nameToShow(): string {
-        return `${this.firstSurname} ${this.secondSurname} ${this.firstName}`;
+        return [
+            this.firstSurname,
+            this.secondSurname,
+            this.firstName
+        ]
+            .filter(Boolean)
+            .join(' ');
     }
 
     constructor({
@@ -30,6 +38,7 @@ export class Teacher {
         fullName,
         phone,
         email,
+        active
     }: {
         id: number;
         firstName: string;
@@ -38,6 +47,7 @@ export class Teacher {
         fullName: string;
         phone: string;
         email: string;
+        active: boolean;
     }) {
         this.id = id;
         this.firstName = firstName;
@@ -46,6 +56,7 @@ export class Teacher {
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
+        this.active = active;
     }
 
     static fromJson(json: TeacherJson): Teacher {
@@ -53,10 +64,11 @@ export class Teacher {
             id: json.id,
             firstName: json.first_name,
             firstSurname: json.first_surname,
-            secondSurname: json.second_surname,
+            secondSurname: json.second_surname ?? '',
             fullName: json.full_name,
             phone: json.phone,
             email: json.email,
+            active: json.active
         });
     }
 
@@ -69,6 +81,7 @@ export class Teacher {
             full_name: this.fullName,
             phone: this.phone,
             email: this.email,
+            active: this.active
         };
     }
 
@@ -81,6 +94,7 @@ export class Teacher {
             fullName: '',
             phone: '',
             email: '',
+            active: true
         });
     }
 }

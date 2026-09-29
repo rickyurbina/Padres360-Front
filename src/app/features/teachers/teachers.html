@@ -113,7 +113,20 @@
               <span style="font-weight: 600;">{{ teacher.id }}</span>
             </td>
             <td style="padding: 0.75rem;">
-              <span style="font-weight: 500;">{{ teacher.firstName + ' ' + teacher.firstSurname }}</span>
+              <div
+                style="display: flex; align-items: center; gap: 0.5rem;">
+
+                <span
+                  class="teacher-status-dot"
+                  [class.active]="teacher.active"
+                  [class.inactive]="!teacher.active"
+                  [title]="teacher.active ? 'Docente activo' : 'Docente inactivo'">
+                </span>
+
+                <span style="font-weight: 500;">
+                  {{ teacher.firstName }} {{ teacher.firstSurname }}
+                </span>
+              </div>
             </td>
             <td style="padding: 0.75rem;">
               <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -166,14 +179,6 @@
                   title="Editar"
                   style="background-color: #0997CB; color: white; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s;">
                   <i class="fas fa-pencil"></i>
-                </button>
-                <button 
-                  *ngIf="hasAccess(Functionality.DeleteDocentes)"
-                  (click)="eliminarMaestro(teacher)" 
-                  class="btn btn-icon" 
-                  title="Eliminar"
-                  style="background-color: #ef4444; color: white; border: none; padding: 0.5rem; border-radius: 0.375rem; cursor: pointer; transition: all 0.2s;">
-                  <i class="fas fa-trash"></i>
                 </button>
               </div>
             </td>

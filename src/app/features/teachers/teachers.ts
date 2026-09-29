@@ -11,7 +11,7 @@ import { EmergencyDataComponent } from '../emergency-data/emergency-data';
 import { LottieComponent, AnimationOptions } from 'ngx-lottie';
 import { Functionality } from '@enums/functionality.enum';
 import { AccessControlService } from '@services/access-control.service';
-import { TeacherModalComponent } from './teacher-modal/teacher-modal';
+import { Router } from '@angular/router';
 
 interface Filters {
   especialidad: string;
@@ -82,7 +82,7 @@ export class TeachersComponent implements OnInit {
     private teacherService: TeacherService,
     private cdr: ChangeDetectorRef,
     private accessControlService: AccessControlService,
-    // private router: Router
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -293,18 +293,9 @@ export class TeachersComponent implements OnInit {
   }
 
   abrirModalAgregar(): void {
-    this.modalService.openModal(TeacherModalComponent, {
-      title: 'Registrar docente',
-      size: 'lg',
-      data: { },
-      showClose: true
-    }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
-    });
+    this.router.navigate([
+      '/dashboard/teachers/new'
+    ]);
   }
 
   // ===================== ACCIONES DE MAESTROS =====================
@@ -360,18 +351,11 @@ export class TeachersComponent implements OnInit {
   }
 
   editarMaestro(teacher: Teacher): void {
-    this.modalService.openModal(TeacherModalComponent, {
-      title: 'Editar docente',
-      size: 'lg',
-      data: { selected:[teacher]},
-      showClose: true
-    }).subscribe((result) => {
-      if (result?.success) {
-        console.log('El modal se cerró con datos:', result);
-      } else {
-        console.log('El modal se cerró sin cambios');
-      }
-    });
+    this.router.navigate([
+      '/dashboard/teachers',
+      teacher.id,
+      'edit'
+    ]);
   }
 
   eliminarMaestro(teacher: Teacher): void {

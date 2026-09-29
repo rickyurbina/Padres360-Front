@@ -162,6 +162,27 @@ export const routes: Routes = [
                     import('./features/users/users-list/users-list')
                         .then(m => m.UsersList)
             },
+            {
+                path: 'teachers/new',
+                title: 'Registrar docente',
+                loadComponent: () =>
+                    import('./features/teachers/teacher-form/teacher-form')
+                        .then(m => m.TeacherForm)
+            },
+            {
+                path: 'teachers/:id/edit',
+                title: 'Editar docente',
+                loadComponent: () =>
+                    import('./features/teachers/teacher-form/teacher-form')
+                        .then(m => m.TeacherForm)
+            },
+            {
+                path: 'teachers',
+                title: 'Profesores',
+                loadComponent: () =>
+                    import('./features/teachers/teachers')
+                        .then(m => m.TeachersComponent)
+            },
         ]
     },
     {

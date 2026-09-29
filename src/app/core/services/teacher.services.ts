@@ -28,7 +28,7 @@ export class TeacherService {
     
     return this.http.get<Teacher[]>(TEACHER_URLS.LIST, { headers }).pipe(
         map((response: any[]) => {
-            console.log('Respuesta del servidor:', response);
+            //console.log('Respuesta del servidor:', response);
             return response.map(item => new Teacher({
                 id: item.id,
                 firstName: item.first_name,
@@ -36,7 +36,8 @@ export class TeacherService {
                 secondSurname: item.second_surname,
                 fullName: item.full_name,
                 phone: item.phone,
-                email: item.email
+                email: item.email,
+                active: item.active
             }));
         }),
         catchError((error: HttpErrorResponse) => {

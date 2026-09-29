@@ -1,0 +1,369 @@
+<div class="teacher-form-page">
+  <header class="page-header">
+    <button
+      type="button"
+      class="back-button"
+      (click)="cancel()">
+      ← Regresar
+    </button>
+
+    <div>
+      <h1>
+        {{
+          isEditMode
+            ? 'Editar docente'
+            : 'Registrar docente'
+        }}
+      </h1>
+
+      <p>
+        {{
+          isEditMode
+            ? 'Actualiza los datos y asignaciones del docente.'
+            : 'Registra la cuenta y asignaciones del docente.'
+        }}
+      </p>
+    </div>
+  </header>
+
+  <div
+    *ngIf="isLoading"
+    class="status-card">
+    Cargando información del docente...
+  </div>
+
+  <div
+    *ngIf="!isLoading && errorMessage"
+    class="alert alert-error">
+    {{ errorMessage }}
+  </div>
+
+  <form
+    *ngIf="!isLoading"
+    #teacherForm="ngForm"
+    (ngSubmit)="save(teacherForm)"
+    novalidate>
+
+    <section class="form-card">
+      <div class="section-header">
+        <div>
+          <h2>Datos del docente</h2>
+          <p>
+            Información personal y estado de la cuenta.
+          </p>
+        </div>
+
+        <label class="active-control">
+          <input
+            type="checkbox"
+            name="active"
+            [(ngModel)]="formTeacher.active">
+          Docente activo
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="firstName">
+            Nombre(s) *
+          </label>
+
+          <input
+            id="firstName"
+            type="text"
+            name="firstName"
+            [(ngModel)]="formTeacher.first_name"
+            #firstName="ngModel"
+            maxlength="50"
+            required>
+
+          <small
+            *ngIf="
+              firstName.invalid &&
+              firstName.touched
+            "
+            class="field-error">
+            El nombre es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="firstSurname">
+            Apellido paterno *
+          </label>
+
+          <input
+            id="firstSurname"
+            type="text"
+            name="firstSurname"
+            [(ngModel)]="formTeacher.first_surname"
+            #firstSurname="ngModel"
+            maxlength="50"
+            required>
+
+          <small
+            *ngIf="
+              firstSurname.invalid &&
+              firstSurname.touched
+            "
+            class="field-error">
+            El apellido paterno es obligatorio.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="secondSurname">
+            Apellido materno
+          </label>
+
+          <input
+            id="secondSurname"
+            type="text"
+            name="secondSurname"
+            [(ngModel)]="formTeacher.second_surname"
+            maxlength="50">
+        </div>
+
+        <div class="form-field">
+          <label for="phone">
+            Teléfono *
+          </label>
+
+          <input
+            id="phone"
+            type="tel"
+            name="phone"
+            [(ngModel)]="formTeacher.phone"
+            #phone="ngModel"
+            inputmode="numeric"
+            pattern="[0-9]{10}"
+            minlength="10"
+            maxlength="10"
+            required>
+
+          <small
+            *ngIf="
+              phone.invalid &&
+              phone.touched
+            "
+            class="field-error">
+            El teléfono debe contener 10 dígitos.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="email">
+            Correo electrónico *
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="formTeacher.email"
+            #email="ngModel"
+            maxlength="254"
+            required
+            email>
+
+          <small
+            *ngIf="
+              email.invalid &&
+              email.touched
+            "
+            class="field-error">
+            Ingresa un correo electrónico válido.
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="password">
+            {{
+              isEditMode
+                ? 'Nueva contraseña'
+                : 'Contraseña inicial'
+            }}
+          </label>
+
+          <input
+            id="password"
+            type="password"
+            name="password"
+            [(ngModel)]="formTeacher.password"
+            #password="ngModel"
+            minlength="6"
+            autocomplete="new-password">
+
+          <small class="field-help">
+            <ng-container *ngIf="!isEditMode">
+              Si queda vacía, se utilizará el teléfono.
+            </ng-container>
+
+            <ng-container *ngIf="isEditMode">
+              Déjala vacía para conservar la actual.
+            </ng-container>
+          </small>
+
+          <small
+            *ngIf="
+              password.invalid &&
+              password.touched
+            "
+            class="field-error">
+            La contraseña debe contener al menos
+            6 caracteres.
+          </small>
+        </div>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="section-header">
+        <div>
+          <h2>Asignaciones académicas</h2>
+          <p>
+            Selecciona las materias y grupos que
+            atiende el docente.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="addAssignment()">
+          + Agregar asignación
+        </button>
+      </div>
+
+      <div
+        *ngIf="formTeacher.assignments.length === 0"
+        class="empty-assignments">
+        No se han agregado asignaciones. Puedes
+        registrar al docente y asignarlas después.
+      </div>
+
+      <div
+        *ngFor="
+            let assignment of formTeacher.assignments;
+            let index = index
+        "
+        [id]="'assignment-' + index"
+        class="assignment-card">
+
+        <div class="assignment-header">
+          <h3>
+            Asignación {{ index + 1 }}
+          </h3>
+
+          <button
+            type="button"
+            class="remove-button"
+            (click)="removeAssignment(index)">
+            Quitar
+          </button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label
+              [for]="'subject' + index">
+              Materia *
+            </label>
+
+            <select
+              [id]="'subject' + index"
+              [name]="'subject' + index"
+              [(ngModel)]="assignment.subject_id"
+              #subjectControl="ngModel"
+              required>
+
+              <option [ngValue]="null">
+                Selecciona una materia
+              </option>
+
+              <option
+                *ngFor="let subject of subjects"
+                [ngValue]="subject.id">
+                {{ subject.name }}
+              </option>
+            </select>
+
+            <small
+              *ngIf="
+                subjectControl.invalid &&
+                subjectControl.touched
+              "
+              class="field-error">
+              Selecciona una materia.
+            </small>
+          </div>
+
+          <div class="form-field">
+            <label
+              [for]="'group' + index">
+              Grupo *
+            </label>
+
+            <select
+              [id]="'group' + index"
+              [name]="'group' + index"
+              [(ngModel)]="assignment.group_id"
+              #groupControl="ngModel"
+              required>
+
+              <option [ngValue]="null">
+                Selecciona un grupo
+              </option>
+
+              <option
+                *ngFor="let group of groups"
+                [ngValue]="group.id">
+                {{ group.group }}
+                <ng-container *ngIf="group.specialty">
+                  - {{ group.specialty }}
+                </ng-container>
+                <ng-container *ngIf="group.shift">
+                  - {{ group.shift }}
+                </ng-container>
+              </option>
+            </select>
+
+            <small
+              *ngIf="
+                groupControl.invalid &&
+                groupControl.touched
+              "
+              class="field-error">
+              Selecciona un grupo.
+            </small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="secondary-button"
+        [disabled]="isSaving"
+        (click)="cancel()">
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="primary-button"
+        [disabled]="isSaving">
+        {{
+          isSaving
+            ? 'Guardando...'
+            : (
+                isEditMode
+                  ? 'Guardar cambios'
+                  : 'Registrar docente'
+              )
+        }}
+      </button>
+    </div>
+  </form>
+</div>
