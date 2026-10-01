@@ -139,7 +139,20 @@
                 style="cursor: pointer; width: 18px; height: 18px;">
             </td>
             <td style="padding: 0.75rem;">
-              <span style="font-weight: 500;">{{ incidence.firstName }}</span>
+              <div
+                style="display: flex; align-items: center; gap: 0.5rem;">
+
+                <span
+                  class="student-status-dot"
+                  [class.active]="incidence.active"
+                  [class.inactive]="!incidence.active"
+                  [title]="incidence.active ? 'Alumno activo' : 'Alumno inactivo'">
+                </span>
+
+                <span style="font-weight: 500;">
+                  {{ incidence.firstName }}
+                </span>
+              </div>
             </td>
             <td style="padding: 0.75rem;">
               {{ incidence.firstSurname }} {{ incidence.secondSurname }}

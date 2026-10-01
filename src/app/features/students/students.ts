@@ -162,7 +162,17 @@ export class StudentsComponent implements OnInit {
     }
 
     this.filteredStudents = filtered;
-    this.isEmpty = this.filteredStudents.length === 0 && !this.hasError && !this.isLoading;
+
+    if (this.sortColumn) {
+      this.sortFilteredStudents();
+    }
+
+    this.isEmpty =
+      this.filteredStudents.length === 0 &&
+      !this.hasError &&
+      !this.isLoading;
+
+    this.currentPage = 1;
     this.updatePagination();
   }
 
@@ -188,33 +198,97 @@ export class StudentsComponent implements OnInit {
   // ===================== ORDENAMIENTO =====================
   onSort(column: string): void {
     if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+      this.sortDirection =
+        this.sortDirection === 'asc'
+          ? 'desc'
+          : 'asc';
     } else {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
 
-    this.filteredStudents.sort((a, b) => {
-      const aValue = a[column as keyof Student];
-      const bValue = b[column as keyof Student];
-
-      let comparison = 0;
-
-      // Manejo seguro de comparación
-      if (aValue === undefined || aValue === null) return 1;
-      if (bValue === undefined || bValue === null) return -1;
-
-      // Convertir a string para comparación segura
-      const aStr = String(aValue).toLowerCase();
-      const bStr = String(bValue).toLowerCase();
-
-      if (aStr > bStr) comparison = 1;
-      if (aStr < bStr) comparison = -1;
-
-      return this.sortDirection === 'asc' ? comparison : -comparison;
-    });
-
+    this.currentPage = 1;
+    this.sortFilteredStudents();
     this.updatePagination();
+  }
+  private sortFilteredStudents(): void {
+    if (!this.sortColumn) {
+      return;
+    }
+
+    const collator = new Intl.Collator(
+      'es',
+      {
+        sensitivity: 'base',
+        numeric: true
+      }
+    );
+
+    this.filteredStudents.sort((a, b) => {
+      const aValue = this.getSortValue(
+        a,
+        this.sortColumn
+      );
+
+      const bValue = this.getSortValue(
+        b,
+        this.sortColumn
+      );
+
+      let comparison: number;
+
+      if (
+        typeof aValue === 'number' &&
+        typeof bValue === 'number'
+      ) {
+        comparison = aValue - bValue;
+      } else {
+        comparison = collator.compare(
+          String(aValue),
+          String(bValue)
+        );
+      }
+
+      return this.sortDirection === 'asc'
+        ? comparison
+        : -comparison;
+    });
+  }
+
+  private getSortValue(
+    student: Student,
+    column: string
+  ): string | number {
+    switch (column) {
+      case 'id':
+        return student.id ?? 0;
+
+      case 'nombre':
+        return student.firstName ?? '';
+
+      case 'apellidos':
+        return [
+          student.firstSurname,
+          student.secondSurname
+        ]
+          .filter(Boolean)
+          .join(' ');
+
+      case 'grado':
+        return Number(student.group?.grade ?? 0);
+
+      case 'grupo':
+        return student.group?.name ?? '';
+
+      case 'especialidad':
+        return student.group?.specialty ?? '';
+
+      case 'turno':
+        return student.group?.shift ?? '';
+
+      default:
+        return '';
+    }
   }
 
   getSortIcon(column: string): string {
@@ -382,16 +456,61 @@ abrirModalAgregar(): void {
     }
 
 
-  eliminarIncidencia(incidence: Student): void {
-    this.modalConfirmation.confirm('¿Deseas continuar con esta acción?')
+  eliminarIncidencia(student: Student): void {
+    const studentName = [
+      student.firstName,
+      student.firstSurname,
+      student.secondSurname
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    const message =
+      `Esta acción eliminará definitivamente a ` +
+      `${studentName}, sus incidencias, datos médicos ` +
+      `y relaciones. Los tutores que no tengan otros ` +
+      `alumnos también serán eliminados. ` +
+      `Esta acción no se puede deshacer.`;
+
+    this.modalConfirmation
+      .confirmDelete(
+        message,
+        'Eliminar alumno definitivamente'
+      )
       .subscribe(result => {
-        // if (result === 'yes') {
-        //   console.log('Usuario confirmó');
-        // } else if (result === 'no') {
-        //   console.log('Usuario rechazó');
-        // } else {
-        //   console.log('Usuario cerró el modal');
-        // }
+        if (result !== 'yes') {
+          return;
+        }
+
+        this.studentService
+          .deleteStudentPermanently(student.id)
+          .subscribe({
+            next: response => {
+              this.students = this.students.filter(
+                item => item.id !== student.id
+              );
+
+              this.selectedItems.delete(student);
+              this.applyFilters();
+              this.cdr.detectChanges();
+
+              this.modalConfirmation
+                .showSuccess(
+                  response.message,
+                  'Alumno eliminado'
+                )
+                .subscribe();
+            },
+            error: error => {
+              this.modalConfirmation
+                .showError(
+                  error.message ||
+                    'No fue posible eliminar al alumno.',
+                  'Error al eliminar'
+                )
+                .subscribe();
+            }
+          });
       });
   }
 

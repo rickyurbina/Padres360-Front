@@ -43,6 +43,8 @@ export const STUDENT_URLS = {
   UPDATE: (studentId: number) => `${API_BASE.V1}/api/students/${studentId}/update/`,
   EDIT: (studentId: number) => `${API_BASE.V1}/api/students/${studentId}/edit/`,
   STUDENT_LIST: `${API_BASE.V1}/api/students/list`,
+  DELETE: (studentId: number) =>
+  `${API_BASE.V1}/api/students/${studentId}/delete/`,
 };
 
 // Incidences API

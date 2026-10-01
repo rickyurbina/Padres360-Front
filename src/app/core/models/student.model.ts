@@ -1,6 +1,6 @@
 export interface StudentResponse {
-  success: boolean,
-  students: Student[]
+  success: boolean;
+  students: Student[];
 }
 
 export interface StudentJson {
@@ -14,6 +14,7 @@ export interface StudentJson {
   uuid?: string;
   parent?: number[];
   grade: number;
+  active?: boolean;
 }
 
 export class Student {
@@ -27,6 +28,7 @@ export class Student {
   uuid: string;
   parent: number[];
   grade: number;
+  active: boolean;
 
   constructor(
     id: number,
@@ -39,6 +41,7 @@ export class Student {
     uuid: string,
     parent: number[],
     grade: number,
+    active: boolean = true
   ) {
     this.id = id;
     this.group = group;
@@ -50,11 +53,18 @@ export class Student {
     this.uuid = uuid;
     this.parent = parent;
     this.grade = grade;
+    this.active = active;
   }
 
   get lastName(): string {
-    if (!this.firstSurname) return this.secondSurname;
-    if (!this.secondSurname) return this.firstSurname;
+    if (!this.firstSurname) {
+      return this.secondSurname;
+    }
+
+    if (!this.secondSurname) {
+      return this.firstSurname;
+    }
+
     return `${this.firstSurname} ${this.secondSurname}`;
   }
 
@@ -69,7 +79,8 @@ export class Student {
       json.curp ?? '',
       json.uuid ?? '',
       json.parent ? [...json.parent] : [],
-      json.grade ?? 0
+      json.grade ?? 0,
+      json.active ?? true
     );
   }
 
@@ -85,10 +96,23 @@ export class Student {
       uuid: this.uuid,
       parent: this.parent,
       grade: this.grade,
+      active: this.active
     };
   }
 
   static empty(): Student {
-    return new Student(0, 0, '', '', '', '', '', '', [], 0);
+    return new Student(
+      0,
+      0,
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      [],
+      0,
+      true
+    );
   }
 }

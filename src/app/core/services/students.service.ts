@@ -110,8 +110,10 @@ export class StudentService {
             controlNumber: item.control_number,
             curp: item.curp,
             uuid: item.uuid,
-            parent: item.parent
+            parent: item.parent,
+            active: item.active
         } as Student));
+
         return students;
     }
 
@@ -417,5 +419,31 @@ export class StudentService {
         }
 
         return null;
+    }
+    deleteStudentPermanently(
+        studentId: number
+    ): Observable<{
+        success: boolean;
+        message: string;
+    }> {
+        const token =
+            localStorage.getItem('auth_token');
+
+        const headers = {
+            Authorization: `Bearer ${token}`
+        };
+
+        return this.http.delete<{
+            success: boolean;
+            message: string;
+        }>(
+            STUDENT_URLS.DELETE(studentId),
+            { headers }
+        ).pipe(
+            catchError(
+                (error: HttpErrorResponse) =>
+                    this.handleError(error)
+            )
+        );
     }
 }
