@@ -28,7 +28,7 @@ export class AccessControlService {
         [Functionality.ReporteIncidAlumno]:             { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 0, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 1, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.RepIncidPorAlumno]:              { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 1, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.CreateAlumno]:                   { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
-        [Functionality.UpdateAlumno]:                   { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
+        [Functionality.UpdateAlumno]:                   { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.DeleteAlumno]:                   { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 0, PREFECTURE: 0, NURSING: 0, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.CapturaInfoMedicaAlumno]:        { PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 0, NURSING: 1, TEACHER: 0, PARENT: 0, None: 0 },
         [Functionality.MisIncidenciasRegistradasAlumnos]:{ PRINCIPAL: 1, TEACHING_SERVICES: 0, SCHOOL_SERVICES: 1, EDUCATIONAL_GUIDANCE: 1, PREFECTURE: 1, NURSING: 0, TEACHER: 1, PARENT: 0, None: 0 },
