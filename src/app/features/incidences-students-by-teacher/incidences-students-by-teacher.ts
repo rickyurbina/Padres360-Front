@@ -115,7 +115,7 @@ export class IncidencesStudentByTeacherComponent implements OnInit {
   private dataLoad(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.incidencesService.getIncidenceRecords({
-        createdBy: this.currentUser.teacher_id,
+        createdBy: this.currentUser.id,
         schoolId: this.currentUser.school_id,
         startDate: this.filters.startDate,
         endDate: this.filters.endDate,

@@ -95,7 +95,7 @@ export class IncidencesStudentComponent implements OnInit {
     this.currentUser = this.authservice.getCurrentUser();
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const today = new Date();
 
     const startDate = new Date();
@@ -103,6 +103,7 @@ export class IncidencesStudentComponent implements OnInit {
 
     this.filtersDate.startDate = this.formatDate(startDate);
     this.filtersDate.endDate = this.formatDate(today);
+
     this.loadData();
   }
 
@@ -131,7 +132,6 @@ export class IncidencesStudentComponent implements OnInit {
   private dataLoad(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.incidencesService.getIncidenceRecords({
-        createdBy: this.currentUser.teacher_id,
         schoolId: this.currentUser.school_id,
         startDate: this.filtersDate.startDate,
         endDate: this.filtersDate.endDate,
